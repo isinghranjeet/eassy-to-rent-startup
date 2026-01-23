@@ -2,6 +2,12 @@ import { NavLink as RouterNavLink, NavLinkProps } from "react-router-dom";
 import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
+/**
+ * NavLinkCompatProps
+ * - className: default class
+ * - activeClassName: class when link is active
+ * - pendingClassName: class when navigation is pending
+ */
 interface NavLinkCompatProps extends Omit<NavLinkProps, "className"> {
   className?: string;
   activeClassName?: string;
@@ -9,7 +15,10 @@ interface NavLinkCompatProps extends Omit<NavLinkProps, "className"> {
 }
 
 const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
-  ({ className, activeClassName, pendingClassName, to, ...props }, ref) => {
+  (
+    { className, activeClassName = "text-primary font-bold", pendingClassName = "text-muted", to, ...props },
+    ref
+  ) => {
     return (
       <RouterNavLink
         ref={ref}
@@ -20,7 +29,7 @@ const NavLink = forwardRef<HTMLAnchorElement, NavLinkCompatProps>(
         {...props}
       />
     );
-  },
+  }
 );
 
 NavLink.displayName = "NavLink";

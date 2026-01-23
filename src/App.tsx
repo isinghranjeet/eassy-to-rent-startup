@@ -1,10 +1,13 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "./components/ui/toaster";
+import { Toaster as Sonner } from "./components/ui/sonner";
+import { TooltipProvider } from "./components/ui/tooltip";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { WishlistProvider } from "@/contexts/WishlistContext";
-import { CompareProvider } from "@/contexts/CompareContext";
+
+import { WishlistProvider } from "./contexts/WishlistContext";
+import { CompareProvider } from "./contexts/CompareContext";
+
 import Index from "./pages/Index";
 import PGList from "./pages/PGList";
 import PGDetail from "./pages/PGDetail";
@@ -15,6 +18,7 @@ import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
+import AdminPGPortal from "./pages/AdminPGPortal";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +42,7 @@ const App = () => (
               <Route path="/faq" element={<FAQ />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/privacy" element={<Privacy />} />
+              <Route path="/admin" element={<AdminPGPortal />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

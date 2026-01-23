@@ -1,11 +1,10 @@
-import { Navbar } from '@/components/layout/Navbar';
-import { Footer } from '@/components/layout/Footer';
-import { Hero } from '@/components/home/Hero';
-import { FeaturedPGs } from '@/components/home/FeaturedPGs';
-import { WhyChooseUs } from '@/components/home/WhyChooseUs';
-import { Testimonials } from '@/components/home/Testimonials';
-import { CTASection } from '@/components/home/CTASection';
-
+import { Navbar } from '../components/layout/Navbar';
+import { Footer } from '../components/layout/Footer';
+import { Hero } from '../components/home/Hero';
+import { FeaturedPGs } from '../components/home/FeaturedPGs';
+import { WhyChooseUs } from '../components/home/WhyChooseUs';
+import { Testimonials } from '../components/home/Testimonials';
+import { CTASection } from '../components/home/CTASection';
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
