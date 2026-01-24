@@ -1,8 +1,6 @@
-<<<<<<< HEAD
+
 import { useState, useRef, useEffect } from 'react';
-=======
 import { useState } from 'react';
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { 
@@ -10,31 +8,27 @@ import {
   Heart, Star, Video, CheckCircle, Home, Clock, 
   ThumbsUp, Map, MailIcon, ChevronDown, ChevronUp,
   PhoneCall, X, Linkedin, Twitter, Instagram, ExternalLink,
-<<<<<<< HEAD
+
   GraduationCap, Briefcase, Calendar, MapPin as MapPinIcon,
   Zap, BatteryCharging, Wifi, Dumbbell, Utensils, Lock,
   Wind, Droplets, Volume2, Bot, MessageCircle, Send,
   Download, FileText, Users as UsersIcon, BookOpen, Target, TrendingUp,
   Building, Sparkles, CheckSquare, Eye, PhoneIncoming, MessageSquare
-=======
   GraduationCap, Briefcase, Calendar, MapPin as MapPinIcon
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PGCard } from '@/components/pg/PGCard';
 import { pgListings } from '@/lib/data/pgData';
-<<<<<<< HEAD
+
 import { toast } from 'sonner';
-=======
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 
 const About = () => {
   const [showVideo, setShowVideo] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [selectedTeamMember, setSelectedTeamMember] = useState<number | null>(null);
-<<<<<<< HEAD
+
   const [currentFeature, setCurrentFeature] = useState(0);
   const [whatsappMessage, setWhatsappMessage] = useState('');
   const [chatOpen, setChatOpen] = useState(false);
@@ -145,11 +139,7 @@ const About = () => {
   const stats = [
     { value: '500+', label: 'Verified PGs', icon: CheckCircle, color: 'text-emerald-500' },
     { value: '10K+', label: 'Happy Students', icon: Users, color: 'text-amber-500' },
-<<<<<<< HEAD
-    { value: '50+', label: 'Locations', icon: MapPin, color: 'text-orange-500' },
-=======
     { value: '50+', label: 'Locations', icon: MapPin, color: 'text-blue-500' },
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     { value: '4.8/5', label: 'Avg Rating', icon: Star, color: 'text-yellow-500' },
     { value: '24/7', label: 'Support', icon: Clock, color: 'text-purple-500' },
     { value: '100+', label: 'Team Members', icon: Heart, color: 'text-rose-500' },
