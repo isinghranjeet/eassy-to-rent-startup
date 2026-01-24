@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState, useRef, useEffect } from 'react';
+=======
+import { useState } from 'react';
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { 
@@ -6,23 +10,31 @@ import {
   Heart, Star, Video, CheckCircle, Home, Clock, 
   ThumbsUp, Map, MailIcon, ChevronDown, ChevronUp,
   PhoneCall, X, Linkedin, Twitter, Instagram, ExternalLink,
+<<<<<<< HEAD
   GraduationCap, Briefcase, Calendar, MapPin as MapPinIcon,
   Zap, BatteryCharging, Wifi, Dumbbell, Utensils, Lock,
   Wind, Droplets, Volume2, Bot, MessageCircle, Send,
   Download, FileText, Users as UsersIcon, BookOpen, Target, TrendingUp,
   Building, Sparkles, CheckSquare, Eye, PhoneIncoming, MessageSquare
+=======
+  GraduationCap, Briefcase, Calendar, MapPin as MapPinIcon
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PGCard } from '@/components/pg/PGCard';
 import { pgListings } from '@/lib/data/pgData';
+<<<<<<< HEAD
 import { toast } from 'sonner';
+=======
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 
 const About = () => {
   const [showVideo, setShowVideo] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [selectedTeamMember, setSelectedTeamMember] = useState<number | null>(null);
+<<<<<<< HEAD
   const [currentFeature, setCurrentFeature] = useState(0);
   const [whatsappMessage, setWhatsappMessage] = useState('');
   const [chatOpen, setChatOpen] = useState(false);
@@ -122,11 +134,22 @@ const About = () => {
     }
   ];
 
+=======
+
+  // Add your phone number here
+  const supportPhone = '+91-9876543210'; // Replace with your actual phone number
+  const supportEmail = 'support@cupgfinder.com';
+
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   // Dynamic Stats
   const stats = [
     { value: '500+', label: 'Verified PGs', icon: CheckCircle, color: 'text-emerald-500' },
     { value: '10K+', label: 'Happy Students', icon: Users, color: 'text-amber-500' },
+<<<<<<< HEAD
     { value: '50+', label: 'Locations', icon: MapPin, color: 'text-orange-500' },
+=======
+    { value: '50+', label: 'Locations', icon: MapPin, color: 'text-blue-500' },
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     { value: '4.8/5', label: 'Avg Rating', icon: Star, color: 'text-yellow-500' },
     { value: '24/7', label: 'Support', icon: Clock, color: 'text-purple-500' },
     { value: '100+', label: 'Team Members', icon: Heart, color: 'text-rose-500' },
@@ -138,13 +161,21 @@ const About = () => {
       icon: Shield, 
       title: 'Trust & Safety', 
       description: 'Every PG listing is personally verified for security and safety standards.',
+<<<<<<< HEAD
       gradient: 'from-orange-500 to-amber-500'
+=======
+      gradient: 'from-blue-500 to-cyan-500'
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     },
     { 
       icon: Users, 
       title: 'Student First', 
       description: 'Built by students, for students. We understand your needs perfectly.',
+<<<<<<< HEAD
       gradient: 'from-emerald-500 to-orange-400'
+=======
+      gradient: 'from-emerald-500 to-green-500'
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     },
     { 
       icon: MapPin, 
@@ -156,18 +187,27 @@ const About = () => {
       icon: Award, 
       title: 'Quality Assured', 
       description: 'Only PGs meeting our strict quality standards make it to our platform.',
+<<<<<<< HEAD
       gradient: 'from-purple-500 to-orange-500'
+=======
+      gradient: 'from-purple-500 to-pink-500'
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     },
     { 
       icon: Home, 
       title: 'Home Away From Home', 
       description: 'We prioritize comfort and create environments where students thrive.',
+<<<<<<< HEAD
       gradient: 'from-rose-500 to-orange-400'
+=======
+      gradient: 'from-rose-500 to-red-500'
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     },
     { 
       icon: ThumbsUp, 
       title: 'Top Rated', 
       description: 'Curated selection of highest-rated PGs based on student feedback.',
+<<<<<<< HEAD
       gradient: 'from-orange-600 to-amber-500'
     },
   ];
@@ -189,6 +229,29 @@ const About = () => {
         linkedin: 'https://www.linkedin.com/in/ranjeet-kumar-37016128b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app',
         twitter: 'https://twitter.com/amitkumar',
         instagram: 'https://instagram.com/isinghranjeet_'
+=======
+      gradient: 'from-indigo-500 to-blue-500'
+    },
+  ];
+
+  // Team Members with detailed information
+  const team = [
+    { 
+      id: 1,
+      name: 'Amit Kumar', 
+      role: 'Founder & CEO', 
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+      shortDescription: 'CU Alumni passionate about solving student accommodation problems.',
+      fullBio: 'Amit is a Computer Science graduate from CU (2018 batch). His personal struggle with finding safe accommodation during college inspired him to start CU PG Finder. With 5+ years of experience in the ed-tech space, he leads our vision to make student housing stress-free.',
+      education: 'B.Tech Computer Science, CU (2018)',
+      experience: '5+ years in Ed-Tech & Student Services',
+      location: 'New Delhi, India',
+      joinDate: 'March 2022',
+      socialLinks: {
+        linkedin: 'https://linkedin.com/in/amitkumar',
+        twitter: 'https://twitter.com/amitkumar',
+        instagram: 'https://instagram.com/amitkumar'
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       },
       achievements: [
         'Featured in "Young Entrepreneurs of India" 2023',
@@ -198,12 +261,21 @@ const About = () => {
     },
     { 
       id: 2,
+<<<<<<< HEAD
       name: 'Satyam Kumar', 
       role: 'Head of Operations', 
       image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop',
       shortDescription: 'Ensures every PG listing meets our quality standards.',
       fullBio: 'Satyam brings 8 years of experience in hospitality and operations management. She oversees our verification process, ensuring every PG listed meets our 50+ point quality checklist. Her attention to detail has earned us the "Most Trusted Platform" award.',
       education: 'information technology in Operations, IIM Ahmedabad',
+=======
+      name: 'Priya Sharma', 
+      role: 'Head of Operations', 
+      image: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop',
+      shortDescription: 'Ensures every PG listing meets our quality standards.',
+      fullBio: 'Priya brings 8 years of experience in hospitality and operations management. She oversees our verification process, ensuring every PG listed meets our 50+ point quality checklist. Her attention to detail has earned us the "Most Trusted Platform" award.',
+      education: 'MBA in Operations, IIM Ahmedabad',
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       experience: '8+ years in Hospitality & Operations',
       location: 'Mumbai, India',
       joinDate: 'June 2022',
@@ -220,19 +292,34 @@ const About = () => {
     },
     { 
       id: 3,
+<<<<<<< HEAD
       name: 'Prakash Jha', 
       role: 'Student Relations Head', 
       image: 'https://media.licdn.com/dms/image/v2/D5603AQFux8u3K-yXdQ/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1727537784489?e=1770854400&v=beta&t=htx82OKoRSykJXALd9hsoFDHwVTX_6vSzFGHGaD757w',
       shortDescription: 'Your go-to person for any accommodation-related queries.',
       fullBio: 'Prakash  is a recent CU graduate who understands student needs intimately. He leads our student support team and ensures every query is resolved within 2 hours. His friendly approach has earned him the nickname "PG Guru" among students.',
       education: 'B.Tech , CU (2027)',
+=======
+      name: 'Rohan Mehta', 
+      role: 'Student Relations Head', 
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop',
+      shortDescription: 'Your go-to person for any accommodation-related queries.',
+      fullBio: 'Rohan is a recent CU graduate who understands student needs intimately. He leads our student support team and ensures every query is resolved within 2 hours. His friendly approach has earned him the nickname "PG Guru" among students.',
+      education: 'B.Com Honors, CU (2021)',
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       experience: '3+ years in Customer Relations',
       location: 'Delhi, India',
       joinDate: 'August 2022',
       socialLinks: {
+<<<<<<< HEAD
         linkedin: 'https://www.linkedin.com/in/prakash-kumar-ab33a6289',
         twitter: 'https://twitter.com/rohanmehta',
         instagram: 'Prakash_K138- instagram'
+=======
+        linkedin: 'https://linkedin.com/in/rohanmehta',
+        twitter: 'https://twitter.com/rohanmehta',
+        instagram: 'https://instagram.com/rohanmehta'
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       },
       achievements: [
         'Maintained 98% student satisfaction rate',
@@ -262,6 +349,7 @@ const About = () => {
     },
   ];
 
+<<<<<<< HEAD
   // Amenities showcase
   const amenities = [
     { icon: Wifi, label: 'High-speed WiFi', color: 'bg-blue-100 text-blue-600' },
@@ -287,6 +375,8 @@ const About = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
+=======
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   const toggleFaq = (index: number) => {
     setExpandedFaq(expandedFaq === index ? null : index);
   };
@@ -299,16 +389,25 @@ const About = () => {
 
   const openTeamMemberProfile = (id: number) => {
     setSelectedTeamMember(id);
+<<<<<<< HEAD
     document.body.style.overflow = 'hidden';
+=======
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   };
 
   const closeTeamMemberProfile = () => {
     setSelectedTeamMember(null);
+<<<<<<< HEAD
     document.body.style.overflow = 'auto';
+=======
+    document.body.style.overflow = 'auto'; // Re-enable scrolling
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   };
 
   const selectedMember = team.find(member => member.id === selectedTeamMember);
 
+<<<<<<< HEAD
   const sendWhatsAppMessage = () => {
     const message = encodeURIComponent(whatsappMessage || 'Hello, I need assistance finding PG accommodation near Chandigarh University.');
     const url = `https://wa.me/${whatsappNumber}?text=${message}`;
@@ -397,17 +496,45 @@ const About = () => {
               <span className="block text-3xl md:text-4xl text-orange-200 mt-4">Starts Here</span>
             </h1>
             <p className="text-orange-100 text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
+=======
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50/50">
+      <Navbar />
+
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden hero-gradient py-24 md:py-32">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10" />
+          <div className="container relative mx-auto px-4 text-center">
+            <Badge className="mb-6 bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30">
+              Trusted by 10,000+ Students
+            </Badge>
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground mb-6 leading-tight">
+              Your Perfect PG Journey
+              <span className="block text-3xl md:text-4xl text-primary-foreground/90 mt-4">Starts Here</span>
+            </h1>
+            <p className="text-primary-foreground/90 text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
               We're more than just a platform - we're your trusted companion in finding safe, comfortable, 
               and affordable accommodation near CU campus. Where comfort meets convenience.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
+<<<<<<< HEAD
                 variant="default" 
                 size="lg" 
                 className="px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all duration-300 bg-orange-600 hover:bg-orange-700"
                 onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
               >
                 Explore Features
+=======
+                variant="primary" 
+                size="lg" 
+                className="px-8 py-6 text-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                onClick={() => document.getElementById('featured-pgs')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Explore Featured PGs
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
               </Button>
               <Button 
                 variant="outline" 
@@ -419,6 +546,7 @@ const About = () => {
                 Watch Our Story
               </Button>
             </div>
+<<<<<<< HEAD
             
             {/* Quick Contact Icons */}
             <div className="mt-12 flex justify-center gap-6">
@@ -455,13 +583,19 @@ const About = () => {
                 <span className="text-xs text-white/80 mt-2">Live Chat</span>
               </button>
             </div>
+=======
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
           </div>
         </section>
 
         {/* Stats Section */}
         <section className="py-12 -mt-8 relative z-10">
           <div className="container mx-auto px-4">
+<<<<<<< HEAD
             <div className="bg-gradient-to-br from-white via-white to-orange-50 rounded-3xl p-8 shadow-2xl shadow-orange-100 border border-orange-100 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 text-center">
+=======
+            <div className="bg-gradient-to-br from-white via-white to-primary/5 rounded-3xl p-8 shadow-2xl shadow-primary/10 border border-primary/10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 text-center">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
               {stats.map((stat, i) => (
                 <div 
                   key={stat.label} 
@@ -469,6 +603,7 @@ const About = () => {
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <div className="flex justify-center mb-3">
+<<<<<<< HEAD
                     <div className={`p-3 rounded-2xl bg-gradient-to-br from-white to-orange-50 shadow-lg group-hover:scale-110 transition-transform duration-300 ${stat.color}`}>
                       <stat.icon className="h-6 w-6" />
                     </div>
@@ -477,12 +612,23 @@ const About = () => {
                     {stat.value}
                   </div>
                   <div className="text-gray-600 text-sm font-medium">{stat.label}</div>
+=======
+                    <div className={`p-3 rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-lg group-hover:scale-110 transition-transform duration-300 ${stat.color}`}>
+                      <stat.icon className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="font-display text-3xl md:text-4xl font-bold text-foreground mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-muted-foreground text-sm font-medium">{stat.label}</div>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                 </div>
               ))}
             </div>
           </div>
         </section>
 
+<<<<<<< HEAD
         {/* Features Section */}
         <section id="features" ref={featuresRef} className="py-20 bg-gradient-to-b from-white to-orange-50">
           <div className="container mx-auto px-4">
@@ -558,16 +704,26 @@ const About = () => {
 
         
 
+=======
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
         {/* Story Section */}
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
+<<<<<<< HEAD
                 <Badge variant="outline" className="mb-4 bg-orange-50 text-orange-700 border-orange-200">Our Journey</Badge>
                 <h2 className="font-display text-3xl md:text-4xl font-bold text-gray-900">
                   From Frustration to<span className="text-orange-600"> Solution</span>
                 </h2>
                 <div className="space-y-4 text-gray-600 leading-relaxed">
+=======
+                <Badge variant="outline" className="mb-4">Our Journey</Badge>
+                <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground">
+                  From Frustration to<span className="text-primary"> Solution</span>
+                </h2>
+                <div className="space-y-4 text-muted-foreground leading-relaxed">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                   <p>
                     CU PG Finder was born in 2022 from a simple observation: finding reliable, 
                     affordable accommodation near campus shouldn't be a struggle for students.
@@ -576,11 +732,16 @@ const About = () => {
                     What started as a small initiative to help fellow students has grown into a 
                     trusted platform helping thousands find their perfect home away from home.
                   </p>
+<<<<<<< HEAD
                   <p className="font-semibold text-gray-900">
+=======
+                  <p className="font-semibold text-foreground">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                     Today, we're proud to be the most trusted PG finding platform for CU students.
                   </p>
                 </div>
                 <div className="flex gap-4 pt-4">
+<<<<<<< HEAD
                   <Button 
                     variant="default" 
                     className="bg-orange-600 hover:bg-orange-700"
@@ -590,6 +751,13 @@ const About = () => {
                     Our Story Video
                   </Button>
                   <Button variant="outline" className="border-orange-300 hover:border-orange-400">Read Founder's Note</Button>
+=======
+                  <Button variant="primary" onClick={() => setShowVideo(true)}>
+                    <Video className="h-4 w-4 mr-2" />
+                    Our Story Video
+                  </Button>
+                  <Button variant="outline">Read Founder's Note</Button>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                 </div>
               </div>
               <div className="relative">
@@ -605,7 +773,11 @@ const About = () => {
                     <div className="text-sm">and counting...</div>
                   </div>
                 </div>
+<<<<<<< HEAD
                 <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-orange-500/10 rounded-full blur-3xl" />
+=======
+                <div className="absolute -bottom-6 -right-6 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
               </div>
             </div>
           </div>
@@ -632,6 +804,7 @@ const About = () => {
           </div>
         )}
 
+<<<<<<< HEAD
 
 {/* Video Modal */}
 {showVideo && (
@@ -680,12 +853,42 @@ const About = () => {
                     <amenity.icon className="h-6 w-6" />
                   </div>
                   <span className="font-medium text-gray-900 text-center">{amenity.label}</span>
+=======
+        {/* Values Section */}
+        <section className="py-20 bg-gradient-to-b from-white to-gray-50/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <Badge className="mb-4">Our Promise</Badge>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Core Values That Drive Us
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                We're committed to making your accommodation search experience seamless and stress-free
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {values.map((value, index) => (
+                <div 
+                  key={value.title} 
+                  className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 hover:border-primary/20 animate-fade-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <div className={`mb-6 p-4 rounded-2xl bg-gradient-to-br ${value.gradient} w-fit group-hover:scale-110 transition-transform duration-300`}>
+                    <value.icon className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-display font-bold text-xl text-foreground mb-3">{value.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{value.description}</p>
+                  <div className="mt-6 pt-6 border-t border-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="text-sm text-primary font-semibold">Learn more →</div>
+                  </div>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                 </div>
               ))}
             </div>
           </div>
         </section>
 
+<<<<<<< HEAD
        
 
 
@@ -737,10 +940,39 @@ const About = () => {
                   </a>
                 </div>
               </div>
+=======
+        {/* Featured PGs */}
+        <section id="featured-pgs" className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <Badge className="mb-4">Premium Selection</Badge>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Featured PG Accommodations
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Handpicked PGs with top ratings and premium amenities
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {pgListings.slice(0, 3).map((pg, index) => (
+                <div 
+                  key={pg.id} 
+                  className="transform hover:-translate-y-2 transition-transform duration-300"
+                >
+                  <PGCard pg={pg} index={index} />
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-12">
+              <Button variant="primary" size="lg" className="px-8">
+                View All PGs
+              </Button>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
             </div>
           </div>
         </section>
 
+<<<<<<< HEAD
 
 
 
@@ -805,6 +1037,17 @@ const About = () => {
                 What Students Say About Us
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
+=======
+        {/* Testimonials */}
+        <section className="py-20 bg-gradient-to-br from-primary/5 via-white to-primary/5">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <Badge variant="outline" className="mb-4">Student Voices</Badge>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                What Students Say About Us
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                 Real experiences from our student community
               </p>
             </div>
@@ -838,6 +1081,7 @@ const About = () => {
                       <Star key={idx} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
+<<<<<<< HEAD
                   <p className="italic text-gray-600 mb-6 leading-relaxed">"{testimonial.feedback}"</p>
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center text-white font-bold">
@@ -846,6 +1090,16 @@ const About = () => {
                     <div>
                       <div className="font-display font-semibold text-gray-900">{testimonial.name}</div>
                       <div className="text-sm text-gray-600">{testimonial.role}</div>
+=======
+                  <p className="italic text-muted-foreground mb-6 leading-relaxed">"{testimonial.feedback}"</p>
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-primary/70 flex items-center justify-center text-white font-bold">
+                      {testimonial.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div className="font-display font-semibold text-foreground">{testimonial.name}</div>
+                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                     </div>
                   </div>
                 </div>
@@ -854,6 +1108,7 @@ const About = () => {
           </div>
         </section>
 
+<<<<<<< HEAD
       {/* FAQ Section */}
 <section className="py-24 bg-gradient-to-b from-orange-50/40 to-white">
   <div className="container mx-auto px-4 max-w-4xl">
@@ -947,6 +1202,57 @@ const About = () => {
                 The Faces Behind CU PG Finder
               </h2>
               <p className="text-gray-600 max-w-2xl mx-auto">
+=======
+        {/* FAQ Section */}
+        <section className="py-20">
+          <div className="container mx-auto px-4 max-w-4xl">
+            <div className="text-center mb-16">
+              <Badge className="mb-4">Got Questions?</Badge>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-muted-foreground">
+                Quick answers to common queries
+              </p>
+            </div>
+            <div className="space-y-4">
+              {faqs.map((faq, index) => (
+                <div 
+                  key={index} 
+                  className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-primary/30 transition-colors duration-300"
+                >
+                  <button
+                    className="w-full text-left p-6 flex justify-between items-center hover:bg-gray-50/50 transition-colors"
+                    onClick={() => toggleFaq(index)}
+                  >
+                    <span className="font-display font-semibold text-lg text-foreground">{faq.q}</span>
+                    {expandedFaq === index ? (
+                      <ChevronUp className="h-5 w-5 text-primary" />
+                    ) : (
+                      <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </button>
+                  {expandedFaq === index && (
+                    <div className="px-6 pb-6 animate-fade-in">
+                      <p className="text-muted-foreground leading-relaxed">{faq.a}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Team Section */}
+        <section className="py-20 bg-gradient-to-b from-white to-gray-50/50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <Badge className="mb-4">Meet The Team</Badge>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                The Faces Behind CU PG Finder
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                 Passionate individuals dedicated to solving student accommodation challenges
               </p>
             </div>
@@ -962,16 +1268,27 @@ const About = () => {
                       alt={member.name}
                       className="w-32 h-32 rounded-full object-cover mx-auto border-4 border-white shadow-lg group-hover:scale-105 transition-transform duration-300"
                     />
+<<<<<<< HEAD
                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
                   <h3 className="font-display font-bold text-xl text-gray-900 mb-2">{member.name}</h3>
                   <div className="text-orange-600 font-semibold mb-4">{member.role}</div>
                   <p className="text-gray-600 text-sm mb-6">{member.shortDescription}</p>
+=======
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <h3 className="font-display font-bold text-xl text-foreground mb-2">{member.name}</h3>
+                  <div className="text-primary font-semibold mb-4">{member.role}</div>
+                  <p className="text-muted-foreground text-sm mb-6">{member.shortDescription}</p>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                   <div className="flex justify-center gap-3">
                     <Button 
                       variant="outline" 
                       size="sm"
+<<<<<<< HEAD
                       className="border-orange-300 hover:border-orange-400"
+=======
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       onClick={() => window.location.href = `mailto:${supportEmail}?subject=Contact ${member.name}`}
                     >
                       Contact
@@ -979,7 +1296,10 @@ const About = () => {
                     <Button 
                       variant="ghost" 
                       size="sm"
+<<<<<<< HEAD
                       className="text-orange-600 hover:text-orange-700"
+=======
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       onClick={() => openTeamMemberProfile(member.id)}
                     >
                       View Profile
@@ -1006,8 +1326,13 @@ const About = () => {
                 {/* Header */}
                 <div className="sticky top-0 z-10 bg-white border-b border-gray-200 rounded-t-3xl p-6 flex justify-between items-center">
                   <div>
+<<<<<<< HEAD
                     <h2 className="font-display text-2xl font-bold text-gray-900">{selectedMember.name}</h2>
                     <p className="text-orange-600 font-semibold">{selectedMember.role}</p>
+=======
+                    <h2 className="font-display text-2xl font-bold text-foreground">{selectedMember.name}</h2>
+                    <p className="text-primary font-semibold">{selectedMember.role}</p>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                   </div>
                   <button 
                     onClick={closeTeamMemberProfile}
@@ -1031,7 +1356,11 @@ const About = () => {
 
                     {/* Basic Info */}
                     <div className="flex-1">
+<<<<<<< HEAD
                       <p className="text-gray-600 mb-6 leading-relaxed">{selectedMember.fullBio}</p>
+=======
+                      <p className="text-muted-foreground mb-6 leading-relaxed">{selectedMember.fullBio}</p>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       
                       {/* Social Links */}
                       <div className="flex gap-4 mb-6">
@@ -1063,9 +1392,15 @@ const About = () => {
 
                       {/* Contact Button */}
                       <Button 
+<<<<<<< HEAD
                         variant="default"
                         className="bg-orange-600 hover:bg-orange-700 mb-6"
                         onClick={() => window.location.href = `mailto:${supportEmail}?subject=Contact ${selectedMember.name}`}
+=======
+                        variant="primary"
+                        onClick={() => window.location.href = `mailto:${supportEmail}?subject=Contact ${selectedMember.name}`}
+                        className="mb-6"
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       >
                         <Mail className="h-4 w-4 mr-2" />
                         Contact {selectedMember.name.split(' ')[0]}
@@ -1075,6 +1410,7 @@ const About = () => {
 
                   {/* Details Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+<<<<<<< HEAD
                     <div className="bg-orange-50 rounded-xl p-6">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="p-2 bg-orange-100 rounded-lg">
@@ -1113,23 +1449,73 @@ const About = () => {
                         <h3 className="font-display font-semibold text-gray-900">Joined</h3>
                       </div>
                       <p className="text-gray-600">{selectedMember.joinDate}</p>
+=======
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <GraduationCap className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="font-display font-semibold text-foreground">Education</h3>
+                      </div>
+                      <p className="text-muted-foreground">{selectedMember.education}</p>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <Briefcase className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="font-display font-semibold text-foreground">Experience</h3>
+                      </div>
+                      <p className="text-muted-foreground">{selectedMember.experience}</p>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <MapPinIcon className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="font-display font-semibold text-foreground">Location</h3>
+                      </div>
+                      <p className="text-muted-foreground">{selectedMember.location}</p>
+                    </div>
+
+                    <div className="bg-gray-50 rounded-xl p-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <Calendar className="h-5 w-5 text-primary" />
+                        </div>
+                        <h3 className="font-display font-semibold text-foreground">Joined</h3>
+                      </div>
+                      <p className="text-muted-foreground">{selectedMember.joinDate}</p>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                     </div>
                   </div>
 
                   {/* Achievements */}
+<<<<<<< HEAD
                   <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6 mb-8">
                     <h3 className="font-display font-semibold text-xl text-gray-900 mb-4">Key Achievements</h3>
+=======
+                  <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-6 mb-8">
+                    <h3 className="font-display font-semibold text-xl text-foreground mb-4">Key Achievements</h3>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                     <ul className="space-y-3">
                       {selectedMember.achievements.map((achievement, index) => (
                         <li key={index} className="flex items-start gap-3">
                           <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+<<<<<<< HEAD
                           <span className="text-gray-600">{achievement}</span>
+=======
+                          <span className="text-muted-foreground">{achievement}</span>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   {/* Direct Contact Info */}
+<<<<<<< HEAD
                   <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6">
                     <h3 className="font-display font-semibold text-xl text-gray-900 mb-4">Get in Touch</h3>
                     <div className="flex flex-col sm:flex-row gap-4">
@@ -1138,11 +1524,25 @@ const About = () => {
                         className="flex items-center justify-center gap-2 bg-white border border-orange-300 rounded-lg px-6 py-3 hover:bg-orange-50 transition-colors"
                       >
                         <PhoneCall className="h-5 w-5 text-orange-600" />
+=======
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6">
+                    <h3 className="font-display font-semibold text-xl text-foreground mb-4">Get in Touch</h3>
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <a 
+                        href={`tel:${supportPhone}`}
+                        className="flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg px-6 py-3 hover:bg-gray-50 transition-colors"
+                      >
+                        <PhoneCall className="h-5 w-5 text-primary" />
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         <span className="font-medium">Call Support</span>
                       </a>
                       <a 
                         href={`mailto:${supportEmail}?subject=Regarding ${selectedMember.name}`}
+<<<<<<< HEAD
                         className="flex items-center justify-center gap-2 bg-orange-600 text-white rounded-lg px-6 py-3 hover:bg-orange-700 transition-colors"
+=======
+                        className="flex items-center justify-center gap-2 bg-primary text-white rounded-lg px-6 py-3 hover:bg-primary/90 transition-colors"
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       >
                         <Mail className="h-5 w-5" />
                         <span className="font-medium">Email {selectedMember.name.split(' ')[0]}</span>
@@ -1156,6 +1556,7 @@ const About = () => {
         )}
 
         {/* Map Section */}
+<<<<<<< HEAD
 <section className="py-20">
   <div className="container mx-auto px-4">
     <div className="text-center mb-12">
@@ -1187,16 +1588,57 @@ const About = () => {
     </div>
   </div>
 </section>
+=======
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <Badge className="mb-4">Our Coverage</Badge>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-4">
+                PG Locations Across Campus
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Find accommodation in all popular student areas near CU
+              </p>
+            </div>
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-gray-200">
+              <div className="h-[500px] bg-gradient-to-br from-blue-50 to-indigo-50 flex flex-col items-center justify-center relative">
+                <Map className="h-24 w-24 text-primary/30 mb-6" />
+                <h3 className="text-2xl font-bold text-foreground mb-2">Interactive Map Coming Soon</h3>
+                <p className="text-muted-foreground mb-8 max-w-md text-center">
+                  We're building an interactive map to help you visualize PG locations, distances from campus, and nearby amenities.
+                </p>
+                <Button variant="outline">
+                  <Globe className="h-4 w-4 mr-2" />
+                  View Area Guide
+                </Button>
+                <div className="absolute top-6 left-6 bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg">
+                  <div className="font-semibold">CU Campus</div>
+                  <div className="text-sm text-muted-foreground">Central Location</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 
         {/* Newsletter */}
         <section className="py-20">
           <div className="container mx-auto px-4 max-w-2xl">
+<<<<<<< HEAD
             <div className="bg-gradient-to-r from-orange-50 via-orange-50/50 to-orange-50 rounded-3xl p-12 text-center border border-orange-200">
               <MailIcon className="h-12 w-12 text-orange-600 mx-auto mb-6" />
               <h2 className="font-display text-3xl font-bold text-gray-900 mb-4">
                 Stay Updated on New Listings
               </h2>
               <p className="text-gray-600 mb-8">
+=======
+            <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-3xl p-12 text-center border border-primary/20">
+              <MailIcon className="h-12 w-12 text-primary mx-auto mb-6" />
+              <h2 className="font-display text-3xl font-bold text-foreground mb-4">
+                Stay Updated on New Listings
+              </h2>
+              <p className="text-muted-foreground mb-8">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                 Subscribe to get notified about new PG listings, special offers, and accommodation tips.
               </p>
               {isSubscribed ? (
@@ -1211,20 +1653,31 @@ const About = () => {
                     type="email" 
                     placeholder="Enter your email address" 
                     required
+<<<<<<< HEAD
                     className="flex-1 px-6 py-4 rounded-xl border border-gray-300 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
                   />
                   <Button type="submit" variant="default" className="px-8 py-4 text-lg bg-orange-600 hover:bg-orange-700">
+=======
+                    className="flex-1 px-6 py-4 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                  />
+                  <Button type="submit" variant="primary" className="px-8 py-4 text-lg">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                     Subscribe
                   </Button>
                 </form>
               )}
+<<<<<<< HEAD
               <p className="text-sm text-gray-500 mt-6">
+=======
+              <p className="text-sm text-muted-foreground mt-6">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                 No spam ever. Unsubscribe anytime.
               </p>
             </div>
           </div>
         </section>
 
+<<<<<<< HEAD
         {/* Live Chat Widget */}
         {chatOpen && (
           <div className="fixed bottom-24 right-6 w-96 bg-white rounded-2xl shadow-2xl border border-orange-200 z-50">
@@ -1316,6 +1769,10 @@ const About = () => {
 
         {/* Final CTA */}
         <section className="py-20 bg-gradient-to-r from-orange-600 to-amber-600 text-white">
+=======
+        {/* Final CTA */}
+        <section className="py-20 bg-gradient-to-r from-primary to-primary/80 text-white">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
           <div className="container mx-auto px-4 text-center">
             <h2 className="font-display text-3xl md:text-5xl font-bold mb-6">
               Ready to Find Your Perfect PG?
@@ -1324,6 +1781,7 @@ const About = () => {
               Join thousands of students who found their ideal accommodation through CU PG Finder
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
+<<<<<<< HEAD
               {/* <Button 
                 variant="secondary" 
                 size="lg" 
@@ -1332,6 +1790,16 @@ const About = () => {
               >
                 Browse All PGs
               </Button> */}
+=======
+              <Button 
+                variant="secondary" 
+                size="lg" 
+                className="px-10 py-6 text-lg font-semibold shadow-lg"
+                onClick={() => document.getElementById('featured-pgs')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Browse All PGs
+              </Button>
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
               <a href={`tel:${supportPhone}`} className="inline-block">
                 <Button 
                   variant="outline" 
@@ -1339,6 +1807,7 @@ const About = () => {
                   className="px-10 py-6 text-lg font-semibold border-2 border-white text-white bg-transparent hover:bg-white/10 w-full sm:w-auto"
                 >
                   <PhoneCall className="h-5 w-5 mr-2" />
+<<<<<<< HEAD
                   Call Support: Click to Call
                 </Button>
               </a>
@@ -1353,6 +1822,13 @@ const About = () => {
                 <MessageCircle className="h-4 w-4" />
                 <span>Chat on WhatsApp</span>
               </a>
+=======
+                  Call Support: {supportPhone}
+                </Button>
+              </a>
+            </div>
+            <div className="mt-8">
+>>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
               <a 
                 href={`mailto:${supportEmail}`} 
                 className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors"
