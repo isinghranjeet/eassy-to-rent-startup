@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useState, useRef, useEffect } from 'react';
-=======
-import { useState, useRef } from 'react';
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
@@ -14,7 +10,6 @@ import {
   MapPin, Phone, Mail, Clock, Send, MessageSquare, 
   HelpCircle, Building, UserCheck, Shield, FileText,
   Map, Globe, Facebook, Twitter, Instagram, Linkedin,
-<<<<<<< HEAD
   CheckCircle, AlertCircle, Loader2, Copy, Calendar,
   X, Upload, MessageCircle, ExternalLink,
   Navigation, Maximize2, Minimize2, MessageCircleMore,
@@ -36,20 +31,6 @@ const mockSubmitContactForm = async (data: any) => {
     submissionId: `SUB-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
   };
 };
-=======
-  CheckCircle, AlertCircle, Loader2, Copy, Calendar
-} from 'lucide-react';
-import { toast } from 'sonner';
-import { z } from 'zod';
-import emailjs from '@emailjs/browser';
-import ReCAPTCHA from 'react-google-recaptcha';
-
-// EmailJS configuration
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-const RECAPTCHA_SITE_KEY = 'YOUR_RECAPTCHA_SITE_KEY';
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
@@ -65,7 +46,6 @@ const contactSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactSchema>;
 
-<<<<<<< HEAD
 // Mock CAPTCHA component
 const MockCAPTCHA = ({ onChange }: { onChange: (token: string | null) => void }) => {
   const [isVerified, setIsVerified] = useState(false);
@@ -352,8 +332,6 @@ const DistanceCalculator = () => {
   );
 };
 
-=======
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
 const Contact = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -368,27 +346,17 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-<<<<<<< HEAD
   const [estimatedResponseTime, setEstimatedResponseTime] = useState('1-2 business hours');
-=======
-  const [estimatedResponseTime, setEstimatedResponseTime] = useState('1-2 hours');
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   const [contactPreferences, setContactPreferences] = useState({
     email: true,
     phone: false,
     whatsapp: true,
   });
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-<<<<<<< HEAD
   const [isChatOpen, setIsChatOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-=======
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-
-  // Feature 1: Real-time Form Validation
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   const validateField = (field: keyof ContactFormData, value: any) => {
     try {
       contactSchema.shape[field].parse(value);
@@ -405,20 +373,13 @@ const Contact = () => {
     validateField(field, value);
   };
 
-<<<<<<< HEAD
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     
-=======
-  // Feature 2: File Upload Handling
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     if (files.length + uploadedFiles.length > 3) {
       toast.error('Maximum 3 files allowed');
       return;
     }
-<<<<<<< HEAD
 
     const oversizedFiles = files.filter(file => file.size > 5 * 1024 * 1024);
     if (oversizedFiles.length > 0) {
@@ -435,14 +396,10 @@ const Contact = () => {
 
     setUploadedFiles(prev => [...prev, ...files]);
     toast.success(`${files.length} file(s) uploaded successfully`);
-=======
-    setUploadedFiles(prev => [...prev, ...files]);
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   };
 
   const removeFile = (index: number) => {
     setUploadedFiles(prev => prev.filter((_, i) => i !== index));
-<<<<<<< HEAD
     toast.info('File removed');
   };
 
@@ -545,52 +502,19 @@ const Contact = () => {
       action: {
         label: 'View',
         onClick: () => window.open(`/faq#${id}`, '_blank'),
-=======
-  };
-
-  // Feature 3: Copy Contact Info
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success('Copied to clipboard!');
-  };
-
-  // Feature 4: Schedule Callback
-  const handleScheduleCallback = () => {
-    toast.success('Callback scheduled!', {
-      description: 'We will call you at your preferred time.',
-      action: {
-        label: 'View Schedule',
-        onClick: () => toast.info('Schedule view coming soon'),
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       },
     });
   };
 
-<<<<<<< HEAD
   const [chatMessage, setChatMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([
     { id: 1, sender: 'bot', message: 'Welcome to CU PG Finder Support. How may I assist you today?', time: '10:00 AM' },
     { id: 2, sender: 'bot', message: 'I can help with PG listings, bookings, payments, or any accommodation-related queries.', time: '10:00 AM' },
-=======
-  // Feature 5: FAQ Quick Links
-  const faqTopics = [
-    { title: 'Booking Process', icon: MessageSquare },
-    { title: 'Payment Methods', icon: FileText },
-    { title: 'PG Verification', icon: Shield },
-    { title: 'Refund Policy', icon: CheckCircle },
-  ];
-
-  // Feature 6: Live Chat Simulation
-  const [chatMessage, setChatMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState([
-    { sender: 'bot', message: 'Hi! How can I help you today?', time: '10:00 AM' },
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
   ]);
 
   const sendChatMessage = () => {
     if (!chatMessage.trim()) return;
     
-<<<<<<< HEAD
     const userMessage = {
       id: chatHistory.length + 1,
       sender: 'user',
@@ -630,40 +554,6 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-=======
-    // Add user message
-    setChatHistory(prev => [...prev, {
-      sender: 'user',
-      message: chatMessage,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }]);
-    
-    // Simulate bot response
-    setTimeout(() => {
-      setChatHistory(prev => [...prev, {
-        sender: 'bot',
-        message: 'Thanks for your message! Our team will get back to you shortly.',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }]);
-    }, 1000);
-    
-    setChatMessage('');
-  };
-
-  // Feature 7: Social Media Integration
-  const socialLinks = [
-    { platform: 'Facebook', icon: Facebook, url: 'https://facebook.com/cupgfinder' },
-    { platform: 'Twitter', icon: Twitter, url: 'https://twitter.com/cupgfinder' },
-    { platform: 'Instagram', icon: Instagram, url: 'https://instagram.com/cupgfinder' },
-    { platform: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/company/cupgfinder' },
-  ];
-
-  // Feature 8: Form Submission with EmailJS
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validate form
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     const result = contactSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
@@ -673,7 +563,6 @@ const Contact = () => {
         }
       });
       setErrors(fieldErrors);
-<<<<<<< HEAD
       
       const firstError = Object.keys(fieldErrors)[0];
       if (firstError) {
@@ -688,22 +577,12 @@ const Contact = () => {
 
     if (!captchaToken) {
       toast.error('Please complete the security verification');
-=======
-      toast.error('Please fix the errors in the form');
-      return;
-    }
-
-    // Validate CAPTCHA
-    if (!captchaToken) {
-      toast.error('Please complete the CAPTCHA verification');
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-<<<<<<< HEAD
       const submissionData = {
         ...formData,
         contactPreferences,
@@ -741,69 +620,12 @@ const Contact = () => {
       }
     } catch (error) {
       console.error('Submission error:', error);
-=======
-      // Prepare template parameters for EmailJS
-      const templateParams = {
-        to_name: 'CU PG Finder Team',
-        from_name: formData.name,
-        from_email: formData.email,
-        from_phone: formData.phone,
-        subject: formData.subject,
-        message: formData.message,
-        enquiry_type: formData.enquiryType,
-        contact_preferences: JSON.stringify(contactPreferences),
-        uploaded_files_count: uploadedFiles.length,
-        estimated_response_time: estimatedResponseTime,
-        timestamp: new Date().toISOString(),
-        'g-recaptcha-response': captchaToken,
-      };
-
-      // Send email using EmailJS
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      );
-
-      // Reset CAPTCHA
-      recaptchaRef.current?.reset();
-      setCaptchaToken(null);
-
-      // Show success modal
-      setShowSuccessModal(true);
-
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
-        enquiryType: '',
-        consent: false,
-      });
-      setUploadedFiles([]);
-
-      toast.success('Message sent successfully!', {
-        description: 'We\'ll get back to you within 24 hours.',
-      });
-
-      // Feature 9: Auto-response simulation
-      setTimeout(() => {
-        toast.info('📧 Auto-response sent to your email!');
-      }, 2000);
-
-    } catch (error) {
-      console.error('EmailJS error:', error);
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       toast.error('Failed to send message. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-<<<<<<< HEAD
   const calculateResponseTime = (type: string) => {
     const times: Record<string, string> = {
       'general': '24 hours',
@@ -811,20 +633,10 @@ const Contact = () => {
       'urgent': '1-2 hours',
       'support': '4-6 hours',
       'listing': '12 hours',
-=======
-  // Feature 10: Response Time Estimator
-  const calculateResponseTime = (type: string) => {
-    const times: Record<string, string> = {
-      'general': '24 hours',
-      'urgent': '1-2 hours',
-      'booking': '2-4 hours',
-      'support': '4-6 hours',
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
     };
     setEstimatedResponseTime(times[type] || '24 hours');
   };
 
-<<<<<<< HEAD
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -861,40 +673,18 @@ const Contact = () => {
       title: 'Support Helpline',
       content: '+91 93150 58665',
       action: () => copyToClipboard('+919315058665', 'Support number'),
-=======
-  const contactInfo = [
-    {
-      icon: MapPin,
-      title: 'Office Address',
-      content: 'CU Campus, University Road, Chandigarh - 160014',
-      action: () => {
-        window.open('https://maps.google.com/?q=CU+Campus+Chandigarh', '_blank');
-      },
-      actionText: 'Get Directions',
-    },
-    {
-      icon: Phone,
-      title: '24/7 Support',
-      content: '+91 9315058665',
-      action: () => copyToClipboard('+919315058665'),
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       actionText: 'Copy Number',
     },
     {
       icon: Mail,
       title: 'Email Support',
       content: 'support@cupgfinder.com',
-<<<<<<< HEAD
       action: () => copyToClipboard('support@cupgfinder.com', 'Email address'),
-=======
-      action: () => copyToClipboard('support@cupgfinder.com'),
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
       actionText: 'Copy Email',
     },
     {
       icon: Clock,
       title: 'Business Hours',
-<<<<<<< HEAD
       content: 'Monday - Sunday: 8:00 AM - 10:00 PM',
       subcontent: 'Emergency support available 24/7',
     },
@@ -1000,50 +790,10 @@ const Contact = () => {
                   </Button>
                 ))}
               </div>
-=======
-      content: 'Mon - Sun: 8:00 AM - 10:00 PM',
-    },
-    {
-      icon: UserCheck,
-      title: 'Personal Assistance',
-      content: 'Book a 1:1 consultation',
-      action: handleScheduleCallback,
-      actionText: 'Schedule Call',
-    },
-  ];
-
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1">
-        {/* Hero Section */}
-        <section className="relative hero-gradient py-20 md:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10" />
-          <div className="container relative mx-auto px-4 text-center">
-            <h1 className="font-display text-4xl md:text-6xl font-bold text-primary-foreground mb-4">
-              Get in Touch With Us
-            </h1>
-            <p className="text-primary-foreground/90 text-lg md:text-xl max-w-3xl mx-auto">
-              Have questions about PG accommodation? Our team is ready to assist you 24/7
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 mt-8">
-              {faqTopics.map((topic) => (
-                <Button
-                  key={topic.title}
-                  variant="outline"
-                  className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20"
-                  onClick={() => toast.info(`FAQ: ${topic.title}`)}
-                >
-                  <topic.icon className="h-4 w-4 mr-2" />
-                  {topic.title}
-                </Button>
-              ))}
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
             </div>
           </div>
         </section>
 
-<<<<<<< HEAD
         {/* Main Content */}
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4">
@@ -1068,48 +818,15 @@ const Contact = () => {
                             {item.subcontent && (
                               <p className="text-gray-500 text-xs">{item.subcontent}</p>
                             )}
-=======
-        {/* Content */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-              {/* Contact Info Cards */}
-              <div className="space-y-8">
-                <div className="bg-card rounded-2xl p-8 shadow-lg border border-gray-100">
-                  <h2 className="font-display text-2xl font-bold text-foreground mb-6">
-                    Contact Information
-                  </h2>
-                  <p className="text-muted-foreground mb-8">
-                    Multiple ways to reach us. Choose what works best for you!
-                  </p>
-                  
-                  <div className="space-y-6">
-                    {contactInfo.map((item) => (
-                      <div key={item.title} className="group">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                            <item.icon className="h-5 w-5 text-primary" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
-                            <p className="text-muted-foreground text-sm mb-2">{item.content}</p>
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                             {item.action && (
                               <Button
                                 variant="ghost"
                                 size="sm"
-<<<<<<< HEAD
                                 className="h-7 text-xs text-orange-600 hover:text-orange-700 mt-2 -ml-2"
                                 onClick={item.action}
                               >
                                 {item.actionText}
                                 <ExternalLink className="h-3 w-3 ml-1" />
-=======
-                                className="h-7 text-xs text-primary hover:text-primary"
-                                onClick={item.action}
-                              >
-                                {item.actionText}
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                               </Button>
                             )}
                           </div>
@@ -1118,42 +835,26 @@ const Contact = () => {
                     ))}
                   </div>
 
-<<<<<<< HEAD
                   {/* Social Media */}
                   <div className="mt-8 pt-6 border-t">
                     <h4 className="font-medium text-gray-900 mb-4">Connect With Us</h4>
                     <div className="flex gap-2">
-=======
-                  {/* Social Media Links */}
-                  <div className="mt-8 pt-8 border-t">
-                    <h4 className="font-medium text-foreground mb-4">Follow Us</h4>
-                    <div className="flex gap-3">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       {socialLinks.map((social) => (
                         <Button
                           key={social.platform}
                           variant="outline"
                           size="icon"
-<<<<<<< HEAD
                           className={`w-9 h-9 rounded-lg border-gray-300 ${social.color}`}
                           onClick={() => window.open(social.url, '_blank')}
                           title={social.platform}
                         >
                           <social.icon className="h-4 w-4" />
-=======
-                          className="rounded-full w-10 h-10"
-                          onClick={() => window.open(social.url, '_blank')}
-                        >
-                          <social.icon className="h-4 w-4" />
-                          <span className="sr-only">{social.platform}</span>
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         </Button>
                       ))}
                     </div>
                   </div>
                 </div>
 
-<<<<<<< HEAD
                 {/* Distance Calculator */}
                 <DistanceCalculator />
               </div>
@@ -1181,100 +882,25 @@ const Contact = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
                         <Label htmlFor="name" className="mb-2 block text-gray-700">
-=======
-                {/* Live Chat Widget */}
-                <div className="bg-card rounded-2xl p-6 shadow-lg border border-gray-100">
-                  <h3 className="font-display text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-                    <MessageSquare className="h-5 w-5 text-primary" />
-                    Live Chat Support
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="h-48 overflow-y-auto space-y-3 p-2">
-                      {chatHistory.map((msg, idx) => (
-                        <div
-                          key={idx}
-                          className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
-                          <div className={`max-w-[80%] rounded-2xl p-3 ${
-                            msg.sender === 'user'
-                              ? 'bg-primary text-primary-foreground'
-                              : 'bg-muted'
-                          }`}>
-                            <p className="text-sm">{msg.message}</p>
-                            <p className="text-xs opacity-70 mt-1">{msg.time}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex gap-2">
-                      <Input
-                        value={chatMessage}
-                        onChange={(e) => setChatMessage(e.target.value)}
-                        placeholder="Type your message..."
-                        onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-                      />
-                      <Button onClick={sendChatMessage}>
-                        <Send className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Contact Form */}
-              <div className="lg:col-span-2">
-                <div className="bg-card rounded-2xl p-6 md:p-8 shadow-xl border border-gray-100">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
-                        Send Your Message
-                      </h2>
-                      <p className="text-muted-foreground mt-2">
-                        Estimated response time: <span className="font-semibold text-primary">{estimatedResponseTime}</span>
-                      </p>
-                    </div>
-                    <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
-                      <Shield className="h-4 w-4" />
-                      <span>Secure & Encrypted</span>
-                    </div>
-                  </div>
-                  
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <Label htmlFor="name" className="mb-2">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                           Full Name *
                         </Label>
                         <Input
                           id="name"
                           value={formData.name}
                           onChange={(e) => handleChange('name', e.target.value)}
-<<<<<<< HEAD
                           placeholder="Enter your full name"
                           className={`${errors.name ? 'border-red-500' : ''}`}
                           disabled={isSubmitting}
                         />
                         {errors.name && (
                           <p className="text-red-600 text-sm mt-1 flex items-center gap-1">
-=======
-                          placeholder="John Doe"
-                          className={errors.name ? 'border-destructive' : ''}
-                        />
-                        {errors.name && (
-                          <p className="text-destructive text-sm mt-1 flex items-center gap-1">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                             <AlertCircle className="h-3 w-3" />
                             {errors.name}
                           </p>
                         )}
                       </div>
                       <div>
-<<<<<<< HEAD
                         <Label htmlFor="email" className="mb-2 block text-gray-700">
-=======
-                        <Label htmlFor="email" className="mb-2">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                           Email Address *
                         </Label>
                         <Input
@@ -1282,20 +908,12 @@ const Contact = () => {
                           type="email"
                           value={formData.email}
                           onChange={(e) => handleChange('email', e.target.value)}
-<<<<<<< HEAD
                           placeholder="Enter your email address"
                           className={`${errors.email ? 'border-red-500' : ''}`}
                           disabled={isSubmitting}
                         />
                         {errors.email && (
                           <p className="text-red-600 text-sm mt-1 flex items-center gap-1">
-=======
-                          placeholder="john@example.com"
-                          className={errors.email ? 'border-destructive' : ''}
-                        />
-                        {errors.email && (
-                          <p className="text-destructive text-sm mt-1 flex items-center gap-1">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                             <AlertCircle className="h-3 w-3" />
                             {errors.email}
                           </p>
@@ -1305,11 +923,7 @@ const Contact = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-<<<<<<< HEAD
                         <Label htmlFor="phone" className="mb-2 block text-gray-700">
-=======
-                        <Label htmlFor="phone" className="mb-2">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                           Phone Number *
                         </Label>
                         <Input
@@ -1317,33 +931,20 @@ const Contact = () => {
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => handleChange('phone', e.target.value)}
-<<<<<<< HEAD
                           placeholder="+91 12345 67890"
                           className={`${errors.phone ? 'border-red-500' : ''}`}
                           disabled={isSubmitting}
                         />
                         {errors.phone && (
                           <p className="text-red-600 text-sm mt-1 flex items-center gap-1">
-=======
-                          placeholder="+91 1234567890"
-                          className={errors.phone ? 'border-destructive' : ''}
-                        />
-                        {errors.phone && (
-                          <p className="text-destructive text-sm mt-1 flex items-center gap-1">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                             <AlertCircle className="h-3 w-3" />
                             {errors.phone}
                           </p>
                         )}
                       </div>
                       <div>
-<<<<<<< HEAD
                         <Label htmlFor="enquiryType" className="mb-2 block text-gray-700">
                           Inquiry Type *
-=======
-                        <Label htmlFor="enquiryType" className="mb-2">
-                          Enquiry Type *
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         </Label>
                         <select
                           id="enquiryType"
@@ -1352,18 +953,12 @@ const Contact = () => {
                             handleChange('enquiryType', e.target.value);
                             calculateResponseTime(e.target.value);
                           }}
-<<<<<<< HEAD
                           className={`w-full px-3 py-2 border rounded-md bg-white ${
                             errors.enquiryType ? 'border-red-500' : 'border-gray-300'
                           } disabled:opacity-50`}
                           disabled={isSubmitting}
                         >
                           <option value="">Select inquiry type</option>
-=======
-                          className="w-full px-3 py-2 border rounded-md bg-background"
-                        >
-                          <option value="">Select type</option>
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                           <option value="general">General Inquiry</option>
                           <option value="booking">Booking Assistance</option>
                           <option value="urgent">Urgent Support</option>
@@ -1371,11 +966,7 @@ const Contact = () => {
                           <option value="listing">List Your PG</option>
                         </select>
                         {errors.enquiryType && (
-<<<<<<< HEAD
                           <p className="text-red-600 text-sm mt-1 flex items-center gap-1">
-=======
-                          <p className="text-destructive text-sm mt-1 flex items-center gap-1">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                             <AlertCircle className="h-3 w-3" />
                             {errors.enquiryType}
                           </p>
@@ -1384,31 +975,19 @@ const Contact = () => {
                     </div>
 
                     <div>
-<<<<<<< HEAD
                       <Label htmlFor="subject" className="mb-2 block text-gray-700">
-=======
-                      <Label htmlFor="subject" className="mb-2">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         Subject *
                       </Label>
                       <Input
                         id="subject"
                         value={formData.subject}
                         onChange={(e) => handleChange('subject', e.target.value)}
-<<<<<<< HEAD
                         placeholder="Enter subject of your inquiry"
                         className={`${errors.subject ? 'border-red-500' : ''}`}
                         disabled={isSubmitting}
                       />
                       {errors.subject && (
                         <p className="text-red-600 text-sm mt-1 flex items-center gap-1">
-=======
-                        placeholder="How can we help you?"
-                        className={errors.subject ? 'border-destructive' : ''}
-                      />
-                      {errors.subject && (
-                        <p className="text-destructive text-sm mt-1 flex items-center gap-1">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                           <AlertCircle className="h-3 w-3" />
                           {errors.subject}
                         </p>
@@ -1416,18 +995,13 @@ const Contact = () => {
                     </div>
 
                     <div>
-<<<<<<< HEAD
                       <Label htmlFor="message" className="mb-2 block text-gray-700">
-=======
-                      <Label htmlFor="message" className="mb-2">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         Message *
                       </Label>
                       <Textarea
                         id="message"
                         value={formData.message}
                         onChange={(e) => handleChange('message', e.target.value)}
-<<<<<<< HEAD
                         placeholder="Please provide detailed information about your inquiry..."
                         rows={5}
                         className={`min-h-[120px] ${errors.message ? 'border-red-500' : ''}`}
@@ -1445,23 +1019,10 @@ const Contact = () => {
                           </p>
                         )}
                       </div>
-=======
-                        placeholder="Please provide details about your enquiry..."
-                        rows={6}
-                        className={errors.message ? 'border-destructive' : ''}
-                      />
-                      {errors.message && (
-                        <p className="text-destructive text-sm mt-1 flex items-center gap-1">
-                          <AlertCircle className="h-3 w-3" />
-                          {errors.message}
-                        </p>
-                      )}
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                     </div>
 
                     {/* File Upload */}
                     <div>
-<<<<<<< HEAD
                       <Label className="mb-2 block text-gray-700">Attachments (Optional)</Label>
                       <div
                         className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
@@ -1470,10 +1031,6 @@ const Contact = () => {
                         onDragOver={handleDragOver}
                         onDrop={handleDrop}
                       >
-=======
-                      <Label className="mb-2">Attachments (Optional)</Label>
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         <input
                           type="file"
                           id="file-upload"
@@ -1481,7 +1038,6 @@ const Contact = () => {
                           onChange={handleFileUpload}
                           className="hidden"
                           accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-<<<<<<< HEAD
                           ref={fileInputRef}
                           disabled={isSubmitting}
                         />
@@ -1496,24 +1052,11 @@ const Contact = () => {
                                 Maximum 3 files, 5MB each (PDF, JPG, PNG, DOC)
                               </p>
                             </div>
-=======
-                        />
-                        <label htmlFor="file-upload" className="cursor-pointer">
-                          <div className="space-y-2">
-                            <FileText className="h-8 w-8 mx-auto text-muted-foreground" />
-                            <p className="text-sm text-muted-foreground">
-                              Drag & drop files or click to browse
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              Max 3 files, 5MB each (PDF, JPG, PNG, DOC)
-                            </p>
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                           </div>
                         </label>
                       </div>
                       {uploadedFiles.length > 0 && (
                         <div className="mt-4 space-y-2">
-<<<<<<< HEAD
                           <p className="text-sm text-gray-600">Uploaded files:</p>
                           {uploadedFiles.map((file, index) => (
                             <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border">
@@ -1525,28 +1068,15 @@ const Contact = () => {
                                     {(file.size / 1024 / 1024).toFixed(2)} MB
                                   </p>
                                 </div>
-=======
-                          {uploadedFiles.map((file, index) => (
-                            <div key={index} className="flex items-center justify-between bg-muted p-3 rounded-lg">
-                              <div className="flex items-center gap-2">
-                                <FileText className="h-4 w-4" />
-                                <span className="text-sm truncate">{file.name}</span>
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                               </div>
                               <Button
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => removeFile(index)}
-<<<<<<< HEAD
                                 className="h-8 w-8 p-0 text-gray-500 hover:text-red-600"
                                 disabled={isSubmitting}
                               >
                                 <X className="h-4 w-4" />
-=======
-                                className="h-6 w-6 p-0"
-                              >
-                                ×
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                               </Button>
                             </div>
                           ))}
@@ -1556,11 +1086,7 @@ const Contact = () => {
 
                     {/* Contact Preferences */}
                     <div>
-<<<<<<< HEAD
                       <Label className="mb-3 block text-gray-700">Preferred Contact Method</Label>
-=======
-                      <Label className="mb-3 block">Preferred Contact Method</Label>
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       <div className="flex flex-wrap gap-4">
                         {Object.entries(contactPreferences).map(([key, value]) => (
                           <div key={key} className="flex items-center gap-2">
@@ -1573,7 +1099,6 @@ const Contact = () => {
                                   [key]: checked as boolean,
                                 }))
                               }
-<<<<<<< HEAD
                               disabled={isSubmitting}
                             />
                             <Label 
@@ -1581,11 +1106,6 @@ const Contact = () => {
                               className="capitalize text-gray-700 cursor-pointer text-sm"
                             >
                               {key === 'whatsapp' ? 'WhatsApp' : key}
-=======
-                            />
-                            <Label htmlFor={`pref-${key}`} className="capitalize">
-                              {key}
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                             </Label>
                           </div>
                         ))}
@@ -1594,30 +1114,15 @@ const Contact = () => {
 
                     {/* CAPTCHA */}
                     <div>
-<<<<<<< HEAD
                       <MockCAPTCHA onChange={setCaptchaToken} />
                     </div>
 
                     {/* Consent Checkbox */}
                     <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border">
-=======
-                      <ReCAPTCHA
-                        ref={recaptchaRef}
-                        sitekey={RECAPTCHA_SITE_KEY}
-                        onChange={setCaptchaToken}
-                        theme="light"
-                        size="normal"
-                      />
-                    </div>
-
-                    {/* Consent Checkbox */}
-                    <div className="flex items-start gap-3">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                       <Checkbox
                         id="consent"
                         checked={formData.consent}
                         onCheckedChange={(checked) => handleChange('consent', checked)}
-<<<<<<< HEAD
                         disabled={isSubmitting}
                         className="mt-1"
                       />
@@ -1641,25 +1146,11 @@ const Contact = () => {
                     </div>
                     {errors.consent && (
                       <p className="text-red-600 text-sm flex items-center gap-1">
-=======
-                      />
-                      <Label htmlFor="consent" className="text-sm text-muted-foreground">
-                        I agree to the processing of my personal data in accordance with the{' '}
-                        <a href="/privacy" className="text-primary hover:underline">
-                          Privacy Policy
-                        </a>
-                        . I understand that this information will be used to respond to my enquiry.
-                      </Label>
-                    </div>
-                    {errors.consent && (
-                      <p className="text-destructive text-sm flex items-center gap-1">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                         <AlertCircle className="h-3 w-3" />
                         {errors.consent}
                       </p>
                     )}
 
-<<<<<<< HEAD
                     {/* Submit Buttons */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Button
@@ -1710,79 +1201,6 @@ const Contact = () => {
                       <PhoneCall className="h-4 w-4 text-purple-600" />
                       Immediate assistance: +91 93150 58665
                     </p>
-=======
-                    {/* Submit Button */}
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={isSubmitting || !captchaToken}
-                      className="w-full gap-2"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Sending Message...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="h-4 w-4" />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </form>
-
-                  {/* Form Tips */}
-                  <div className="mt-6 pt-6 border-t text-sm text-muted-foreground">
-                    <p className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-emerald-500" />
-                      All messages are encrypted and secure
-                    </p>
-                    <p className="flex items-center gap-2 mt-2">
-                      <Clock className="h-4 w-4 text-blue-500" />
-                      Average response time: {estimatedResponseTime}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Map Section */}
-            <div className="mt-16">
-              <div className="bg-card rounded-2xl p-8 shadow-lg border border-gray-100">
-                <h2 className="font-display text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
-                  <Map className="h-5 w-5 text-primary" />
-                  Visit Our Office
-                </h2>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <p className="text-muted-foreground mb-4">
-                      Located near CU Campus for easy access. Feel free to visit us during business hours.
-                    </p>
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <MapPin className="h-4 w-4 text-primary" />
-                        <span>CU Campus, University Road, Chandigarh - 160014</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <Clock className="h-4 w-4 text-primary" />
-                        <span>Monday - Sunday: 8:00 AM - 10:00 PM</span>
-                      </div>
-                      <Button variant="outline" className="gap-2">
-                        <Globe className="h-4 w-4" />
-                        View on Google Maps
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="h-64 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg flex items-center justify-center">
-                    <div className="text-center">
-                      <Map className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-                      <p className="text-muted-foreground">Interactive Map Integration</p>
-                      <Button size="sm" variant="ghost" className="mt-2">
-                        Load Map
-                      </Button>
-                    </div>
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                   </div>
                 </div>
               </div>
@@ -1793,7 +1211,6 @@ const Contact = () => {
 
       <Footer />
 
-<<<<<<< HEAD
       {/* Floating Buttons */}
       <WhatsAppButton />
       
@@ -1837,29 +1254,6 @@ const Contact = () => {
                   </p>
                 </div>
                 <div className="flex gap-3 pt-2">
-=======
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-card rounded-2xl p-8 max-w-md mx-4 shadow-2xl animate-fade-in">
-            <div className="text-center">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="h-8 w-8 text-emerald-600" />
-              </div>
-              <h3 className="font-display text-2xl font-bold text-foreground mb-2">
-                Message Sent Successfully!
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Thank you for contacting CU PG Finder. We've received your message and will respond within{' '}
-                <span className="font-semibold text-primary">{estimatedResponseTime}</span>.
-              </p>
-              <div className="space-y-3">
-                <div className="text-sm text-muted-foreground">
-                  <p>📧 A confirmation email has been sent to {formData.email}</p>
-                  <p className="mt-1">📱 We'll contact you via your preferred method</p>
-                </div>
-                <div className="flex gap-3 pt-4">
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                   <Button
                     variant="outline"
                     className="flex-1"
@@ -1869,21 +1263,13 @@ const Contact = () => {
                   </Button>
                   <Button
                     variant="default"
-<<<<<<< HEAD
                     className="flex-1 bg-orange-600 hover:bg-orange-700"
-=======
-                    className="flex-1"
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                     onClick={() => {
                       setShowSuccessModal(false);
                       window.location.href = '/';
                     }}
                   >
-<<<<<<< HEAD
                     Return to Home
-=======
-                    Back to Home
->>>>>>> 2d5efcac071c5936f401cffa8b6f3beecc267b5d
                   </Button>
                 </div>
               </div>
