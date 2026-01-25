@@ -1,28 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { 
-  ArrowLeft, MapPin, Star, Heart, GitCompare, Share2, Phone, 
+  ArrowLeft, MapPin, Star, Heart, Share2, Phone, 
   Wifi, Utensils, Wind, Car, Shield, Zap, Dumbbell, BookOpen,
   Check, ChevronLeft, ChevronRight, X, Calendar, Clock, Users,
-  Download, Video, MessageCircle, Navigation, ExternalLink,
-  DollarSign, Percent, TrendingUp, TrendingDown, Home,
-  FileText, Mail, PhoneCall, Globe, Lock, Droplets, Sun,
-  Bell, Eye, Maximize2, Minimize2, Play, Pause, RotateCw,
-  ChevronDown, ChevronUp, Building, Map as MapIcon, Route,
-  Calculator, Filter, BadgeCheck, Sparkles, Crown
+  Download, MessageCircle, Navigation,
+  TrendingUp, Home, Mail, PhoneCall, Crown,
+  BadgeCheck, Users as UsersIcon, Building, Route
 } from 'lucide-react';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Progress } from '@/components/ui/progress';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
-import { pgListings } from '@/lib/data/pgData';
-import { useWishlist } from '@/contexts/WishlistContext';
-import { useCompare } from '@/contexts/CompareContext';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -35,32 +28,47 @@ const amenityIcons: Record<string, React.ElementType> = {
   'Power Backup': Zap,
   'Gym': Dumbbell,
   'Study Room': BookOpen,
-  'Laundry': Droplets,
-  'Swimming Pool': Droplets,
-  'Yoga Room': Sun,
-  '24/7 Security': Lock,
-  'Hot Water': Droplets,
-  'TV': Video,
+  'Laundry': Shield,
+  '24/7 Security': Shield,
+  'Hot Water': Utensils,
+  'TV': MessageCircle,
   'Refrigerator': Home,
   'Geyser': Zap,
   'Cooking': Utensils,
-  'Water Purifier': Droplets,
+  'Water Purifier': Utensils,
   'Housekeeping': Shield,
-  'Medical': Shield,
 };
 
+interface PGListing {
+  _id: string;
+  name: string;
+  description: string;
+  city: string;
+  address: string;
+  price: number;
+  type: 'boys' | 'girls' | 'co-ed' | 'family';
+  images: string[];
+  amenities: string[];
+  verified: boolean;
+  featured: boolean;
+  rating: number;
+  reviewCount: number;
+  ownerName?: string;
+  ownerPhone?: string;
+  ownerEmail?: string;
+  createdAt: string;
+  distance?: string;
+  published?: boolean;
+  locality?: string;
+}
+
 const PGDetail = () => {
-  const { slug } = useParams();
-  const navigate = useNavigate();
+  const { id } = useParams();
   const [currentImage, setCurrentImage] = useState(0);
   const [showGallery, setShowGallery] = useState(false);
-  const [show360Tour, setShow360Tour] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [selectedTab, setSelectedTab] = useState('overview');
   const [selectedRoom, setSelectedRoom] = useState(0);
   const [bookingMonths, setBookingMonths] = useState(3);
-  const [virtualTourAngle, setVirtualTourAngle] = useState(0);
   const [showContactForm, setShowContactForm] = useState(false);
   const [contactData, setContactData] = useState({
     name: '',
@@ -68,57 +76,88 @@ const PGDetail = () => {
     email: '',
     message: '',
     visitDate: '',
-    timeSlot: '',
   });
   const [calculatedPrice, setCalculatedPrice] = useState(0);
   const [totalSavings, setTotalSavings] = useState(0);
   const [availabilityPercentage, setAvailabilityPercentage] = useState(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const tourRef = useRef<HTMLDivElement>(null);
+  const [isFavorite, setIsFavorite] = useState(false);
+  
+  // Use mock data instead of API for now
+  const [pg, setPg] = useState<PGListing | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const { isInWishlist, toggleWishlist } = useWishlist();
-  const { isInCompare, toggleCompare } = useCompare();
+  useEffect(() => {
+    // Simulate API call with timeout
+    const timer = setTimeout(() => {
+      loadMockData();
+      setLoading(false);
+    }, 1000);
 
-  const pg = pgListings.find((p) => p.slug === slug);
+    return () => clearTimeout(timer);
+  }, [id]);
 
   useEffect(() => {
     if (pg) {
-      // Calculate dynamic price based on months
       const basePrice = pg.price;
       const discount = bookingMonths >= 6 ? 15 : bookingMonths >= 3 ? 10 : 0;
       const calculated = basePrice * bookingMonths * ((100 - discount) / 100);
       setCalculatedPrice(Math.round(calculated));
       setTotalSavings(basePrice * bookingMonths - calculated);
       
-      // Simulate availability percentage
       const availability = Math.min(100, Math.max(10, Math.random() * 100));
       setAvailabilityPercentage(availability);
+      
+      const favorites = JSON.parse(localStorage.getItem('pgFavorites') || '[]');
+      setIsFavorite(favorites.includes(pg._id));
     }
   }, [pg, bookingMonths]);
 
-  const toggleVideoPlay = () => {
-    if (videoRef.current) {
-      if (isPlaying) {
-        videoRef.current.pause();
-      } else {
-        videoRef.current.play();
-      }
-      setIsPlaying(!isPlaying);
-    }
+  const loadMockData = () => {
+    const mockPG: PGListing = {
+      _id: id || 'mock-id-123',
+      name: 'Premium CU PG Accommodation',
+      description: 'Luxurious PG accommodation located near Chandigarh University Gate 1. Features spacious rooms, high-speed WiFi, nutritious meals, and 24/7 security. Perfect for students looking for a comfortable and safe living environment.',
+      city: 'Chandigarh',
+      address: 'Gate 1, Chandigarh University Road, Gharuan, Punjab',
+      price: 8500,
+      type: 'co-ed',
+      images: [
+        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&auto=format&fit=crop&q=80'
+      ],
+      amenities: ['WiFi', 'AC', 'Meals', 'Parking', 'CCTV', 'Power Backup', 'Laundry', 'Hot Water', 'Study Room'],
+      verified: true,
+      featured: true,
+      rating: 4.5,
+      reviewCount: 128,
+      ownerName: 'Mr. Rajesh Kumar',
+      ownerPhone: '9315058665',
+      ownerEmail: 'rajesh.cupg@gmail.com',
+      createdAt: new Date().toISOString(),
+      distance: '500m from CU Gate 1',
+      locality: 'Gate 1 Area'
+    };
+    
+    setPg(mockPG);
   };
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen();
-      setIsFullscreen(true);
+  const handleFavorite = () => {
+    if (!pg) return;
+    
+    const favorites = JSON.parse(localStorage.getItem('pgFavorites') || '[]');
+    if (isFavorite) {
+      const newFavorites = favorites.filter((favId: string) => favId !== pg._id);
+      localStorage.setItem('pgFavorites', JSON.stringify(newFavorites));
+      setIsFavorite(false);
+      toast.success('Removed from favorites');
     } else {
-      document.exitFullscreen();
-      setIsFullscreen(false);
+      favorites.push(pg._id);
+      localStorage.setItem('pgFavorites', JSON.stringify(favorites));
+      setIsFavorite(true);
+      toast.success('Added to favorites');
     }
-  };
-
-  const handleVirtualTourRotate = (direction: 'left' | 'right') => {
-    setVirtualTourAngle(prev => direction === 'left' ? prev - 90 : prev + 90);
   };
 
   const handleContactSubmit = (e: React.FormEvent) => {
@@ -133,48 +172,96 @@ const PGDetail = () => {
       email: '',
       message: '',
       visitDate: '',
-      timeSlot: '',
     });
   };
 
   const handleWhatsAppContact = () => {
-    const phoneNumber = '9315058665';
+    if (!pg) return;
+    
+    const phoneNumber = pg.ownerPhone?.replace(/\D/g, '') || '9315058665';
     const message = encodeURIComponent(
-      `Hello, I'm interested in ${pg?.name}\n` +
-      `Location: ${pg?.address}\n` +
-      `Price: ₹${pg?.price}/month\n` +
+      `Hello ${pg.ownerName},\n\nI'm interested in your PG:\n` +
+      `• Name: ${pg.name}\n` +
+      `• Location: ${pg.address}\n` +
+      `• Price: ₹${pg.price}/month\n\n` +
       `Please contact me for more details.`
     );
-    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+    window.open(`https://wa.me/91${phoneNumber}?text=${message}`, '_blank');
   };
 
   const downloadBrochure = () => {
-    toast.success('Brochure download started!', {
-      description: 'PG details brochure downloaded.',
-    });
-    // In production, trigger actual PDF download
+    if (!pg) return;
+    
+    toast.success('Brochure downloaded!');
+    // Simulate download
+    const link = document.createElement('a');
+    link.href = '#';
+    link.download = `${pg.name.replace(/\s+/g, '_')}_Brochure.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const viewOnMap = () => {
-    toast.info('Opening location on map', {
-      description: 'You can view directions to this PG.',
-    });
-    // In production, open Google Maps with coordinates
+    if (!pg) return;
+    
+    const address = encodeURIComponent(pg.address);
+    window.open(`https://www.google.com/maps/search/?api=1&query=${address}`, '_blank');
+    toast.info('Opening location on Google Maps');
   };
 
   const scheduleVisit = () => {
     toast.success('Visit scheduled!', {
-      description: 'We\'ll send you a confirmation email.',
+      description: 'We\'ll send you a confirmation.',
     });
+    setShowContactForm(true);
   };
 
-  const calculateEMI = () => {
-    const emi = pg ? (pg.price * 0.1).toFixed(2) : '0';
-    toast.info(`Estimated Monthly EMI: ₹${emi}`, {
-      description: 'Based on 10% of monthly rent',
-    });
+  const handleShare = async () => {
+    if (!pg) return;
+    
+    const shareData = {
+      title: pg.name,
+      text: `Check out ${pg.name} on CU PG Finder - ₹${pg.price}/month`,
+      url: window.location.href,
+    };
+    
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        toast.success('Shared successfully!');
+      } catch (err) {
+        console.log('Error sharing:', err);
+      }
+    } else {
+      navigator.clipboard.writeText(shareData.url);
+      toast.success('Link copied to clipboard!');
+    }
   };
 
+  const handleContactOwner = () => {
+    setShowContactForm(true);
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-orange-50/50">
+        <Navbar />
+        <main className="flex-1 py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
+              <p className="text-muted-foreground">Loading PG details...</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // If no PG data (shouldn't happen with mock data)
   if (!pg) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-orange-50/50">
@@ -207,64 +294,59 @@ const PGDetail = () => {
     );
   }
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: pg.name,
-          text: `Check out ${pg.name} on CU PG Finder`,
-          url: window.location.href,
-        });
-        toast.success('Shared successfully!');
-      } catch (err) {
-        console.log('Error sharing:', err);
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copied to clipboard!');
-    }
-  };
-
-  const handleContactOwner = () => {
-    setShowContactForm(true);
-  };
-
-  // Simulated reviews data
+  // Mock data for reviews and rooms
   const reviews = [
     {
       id: 1,
       name: 'Rahul Sharma',
       rating: 5,
       date: '2 weeks ago',
-      comment: 'Excellent PG with great amenities. The owner is very cooperative.',
+      comment: 'Excellent PG with great amenities. The owner is very cooperative and the food quality is amazing. Highly recommended for CU students!',
       verified: true,
-      program: 'B.Tech CSE, 3rd Year'
+      program: 'B.Tech CSE, CU'
     },
     {
       id: 2,
       name: 'Priya Patel',
       rating: 4,
       date: '1 month ago',
-      comment: 'Good location and food quality. Could be cleaner.',
+      comment: 'Good location near Gate 1 and food quality. Could be cleaner in common areas, but overall a comfortable stay.',
       verified: true,
-      program: 'MBA, 2nd Year'
+      program: 'MBA, CU'
     },
     {
       id: 3,
       name: 'Amit Kumar',
-      rating: 5,
+      rating: 4.5,
       date: '3 months ago',
-      comment: 'Best PG near CU. Highly recommended!',
+      comment: 'Great value for money. The WiFi is fast and the study room is very useful during exams. Close to university.',
       verified: true,
-      program: 'B.Com, 4th Year'
-    }
+      program: 'CA Student'
+    },
   ];
 
-  // Simulated room types with details
   const roomDetails = [
-    { type: 'Single Occupancy', price: pg.price, size: '120 sq ft', available: 3 },
-    { type: 'Double Occupancy', price: pg.price * 0.7, size: '180 sq ft', available: 5 },
-    { type: 'Triple Occupancy', price: pg.price * 0.5, size: '220 sq ft', available: 2 },
+    { 
+      type: 'Single Occupancy', 
+      price: pg.price, 
+      size: '120 sq ft', 
+      available: 3,
+      description: 'Private room with attached bathroom, study table, and wardrobe'
+    },
+    { 
+      type: 'Double Occupancy', 
+      price: pg.price * 0.7, 
+      size: '180 sq ft', 
+      available: 5,
+      description: 'Shared room for 2 people with separate beds and storage'
+    },
+    { 
+      type: 'Triple Occupancy', 
+      price: pg.price * 0.5, 
+      size: '220 sq ft', 
+      available: 2,
+      description: 'Shared room for 3 people, economical option'
+    },
   ];
 
   return (
@@ -274,42 +356,37 @@ const PGDetail = () => {
       {/* Floating Action Buttons */}
       <div className="fixed right-6 bottom-24 z-40 flex flex-col gap-3">
         <button
-          onClick={() => toggleWishlist(pg.id)}
+          onClick={handleFavorite}
           className={cn(
-            "w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110",
-            isInWishlist(pg.id)
-              ? "bg-red-500 text-white animate-pulse"
-              : "bg-white text-gray-700 border border-gray-200"
+            "w-12 h-12 rounded-full shadow-lg border flex items-center justify-center hover:scale-110 transition-all",
+            isFavorite
+              ? "bg-red-50 border-red-200 text-red-500 hover:bg-red-100"
+              : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
           )}
-          title={isInWishlist(pg.id) ? "Remove from wishlist" : "Add to wishlist"}
+          title={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
-          <Heart className={cn("h-5 w-5", isInWishlist(pg.id) && "fill-current")} />
-        </button>
-        
-        <button
-          onClick={() => toggleCompare(pg.id)}
-          className={cn(
-            "w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-110",
-            isInCompare(pg.id)
-              ? "bg-orange-500 text-white"
-              : "bg-white text-gray-700 border border-gray-200"
-          )}
-          title={isInCompare(pg.id) ? "Remove from compare" : "Add to compare"}
-        >
-          <GitCompare className="h-5 w-5" />
+          <Heart className={cn("h-5 w-5", isFavorite && "fill-current")} />
         </button>
         
         <button
           onClick={handleShare}
-          className="w-12 h-12 rounded-full shadow-lg bg-white text-gray-700 border border-gray-200 flex items-center justify-center hover:scale-110 transition-all"
+          className="w-12 h-12 rounded-full shadow-lg bg-white text-gray-700 border border-gray-200 flex items-center justify-center hover:scale-110 transition-all hover:bg-gray-50"
           title="Share"
         >
           <Share2 className="h-5 w-5" />
         </button>
+        
+        <button
+          onClick={downloadBrochure}
+          className="w-12 h-12 rounded-full shadow-lg bg-white text-gray-700 border border-gray-200 flex items-center justify-center hover:scale-110 transition-all hover:bg-gray-50"
+          title="Download Brochure"
+        >
+          <Download className="h-5 w-5" />
+        </button>
       </div>
 
       <main className="flex-1">
-        {/* Breadcrumb with Progress */}
+        {/* Breadcrumb */}
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/pg" className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-600 transition-colors">
@@ -318,83 +395,34 @@ const PGDetail = () => {
             </Link>
             <div className="flex items-center gap-4">
               <Badge className="bg-orange-100 text-orange-700 border-orange-200">
-                <Eye className="h-3 w-3 mr-1" />
-                {Math.floor(Math.random() * 100) + 50} viewing now
-              </Badge>
-              <Badge variant="outline" className="border-green-200 text-green-700">
                 <TrendingUp className="h-3 w-3 mr-1" />
-                Trending
+                Trending at CU
               </Badge>
             </div>
-          </div>
-          
-          {/* Progress Bar */}
-          <div className="mt-4">
-            <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
-              <span>Availability</span>
-              <span className="font-semibold">{availabilityPercentage.toFixed(0)}%</span>
-            </div>
-            <Progress value={availabilityPercentage} className="h-2" />
           </div>
         </div>
 
-        {/* Enhanced Image Gallery */}
+        {/* Image Gallery */}
         <div className="container mx-auto px-4 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[500px] md:h-[600px] relative">
-            {/* Main Image with Overlay */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[400px] md:h-[500px]">
+            {/* Main Image */}
             <div 
-              className="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden cursor-pointer group"
+              className="md:col-span-2 md:row-span-2 relative rounded-2xl overflow-hidden cursor-pointer group"
               onClick={() => setShowGallery(true)}
             >
               <img
                 src={pg.images[0]}
                 alt={pg.name}
-                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              {/* Overlay Content */}
-              <div className="absolute bottom-6 left-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="flex items-center gap-2 mb-2">
-                  <Maximize2 className="h-4 w-4" />
-                  <span className="text-sm">Click to view fullscreen</span>
-                </div>
-              </div>
-              
-              {/* Quick Actions */}
-              <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="bg-white/90 backdrop-blur-sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    downloadBrochure();
-                  }}
-                >
-                  <Download className="h-3 w-3 mr-1" />
-                  Brochure
-                </Button>
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="bg-white/90 backdrop-blur-sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    viewOnMap();
-                  }}
-                >
-                  <MapIcon className="h-3 w-3 mr-1" />
-                  Map
-                </Button>
-              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </div>
             
             {/* Thumbnail Images */}
-            {pg.images.slice(1, 3).map((image, index) => (
+            {pg.images.slice(1, 4).map((image, index) => (
               <div 
                 key={index}
-                className="hidden md:block relative rounded-2xl overflow-hidden cursor-pointer group"
+                className="hidden md:block relative rounded-xl overflow-hidden cursor-pointer group"
                 onClick={() => {
                   setCurrentImage(index + 1);
                   setShowGallery(true);
@@ -403,55 +431,9 @@ const PGDetail = () => {
                 <img
                   src={image}
                   alt={`${pg.name} ${index + 2}`}
-                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                
-                {index === 1 && pg.images.length > 3 && (
-                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                    <span className="text-white font-display font-semibold text-lg">
-                      +{pg.images.length - 3} more
-                    </span>
-                  </div>
-                )}
               </div>
-            ))}
-            
-            {/* Virtual Tour Button */}
-            <div 
-              className="hidden md:flex items-center justify-center relative rounded-2xl overflow-hidden cursor-pointer group bg-gradient-to-br from-orange-500 to-amber-500"
-              onClick={() => setShow360Tour(true)}
-            >
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors" />
-              <div className="relative z-10 text-center p-6">
-                <div className="w-16 h-16 mx-auto mb-4 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                  <Video className="h-8 w-8 text-white" />
-                </div>
-                <h3 className="text-white font-bold text-lg mb-2">Virtual 360° Tour</h3>
-                <p className="text-white/80 text-sm">Explore this PG virtually</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* Image Navigation Dots */}
-          <div className="flex justify-center gap-2 mt-4">
-            {pg.images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => {
-                  setCurrentImage(index);
-                  if (index === 0) {
-                    // Scroll to main image
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  } else {
-                    setShowGallery(true);
-                  }
-                }}
-                className={cn(
-                  "w-2 h-2 rounded-full transition-all",
-                  index === currentImage ? "bg-orange-600 w-8" : "bg-gray-300"
-                )}
-              />
             ))}
           </div>
         </div>
@@ -492,75 +474,6 @@ const PGDetail = () => {
             >
               <ChevronRight className="h-6 w-6 text-white" />
             </button>
-
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-              {pg.images.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentImage(index)}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-colors",
-                    currentImage === index ? "bg-orange-500" : "bg-white/50"
-                  )}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Virtual Tour Modal */}
-        {show360Tour && (
-          <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm flex items-center justify-center p-4">
-            <button
-              onClick={() => setShow360Tour(false)}
-              className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-10 hover:bg-white/20 transition-colors"
-            >
-              <X className="h-6 w-6 text-white" />
-            </button>
-            
-            <div 
-              ref={tourRef}
-              className="relative w-full max-w-4xl aspect-video rounded-xl overflow-hidden"
-              style={{
-                transform: `perspective(1000px) rotateY(${virtualTourAngle}deg)`,
-                transition: 'transform 1s cubic-bezier(0.4, 0, 0.2, 1)',
-              }}
-            >
-              {/* Virtual Tour Content */}
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-900/30 via-amber-900/20 to-orange-900/30">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-white">
-                    <Video className="h-16 w-16 mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-2">Virtual 360° Tour</h3>
-                    <p className="text-white/80">Use buttons to navigate the tour</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-4">
-              <Button
-                onClick={() => handleVirtualTourRotate('left')}
-                className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20"
-              >
-                <ChevronLeft className="h-4 w-4 mr-2" />
-                Rotate Left
-              </Button>
-              <Button
-                onClick={() => handleVirtualTourRotate('right')}
-                className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20"
-              >
-                Rotate Right
-                <ChevronRight className="h-4 w-4 ml-2" />
-              </Button>
-              <Button
-                onClick={() => setVirtualTourAngle(0)}
-                className="bg-white/10 backdrop-blur-sm text-white hover:bg-white/20"
-              >
-                <RotateCw className="h-4 w-4 mr-2" />
-                Reset View
-              </Button>
-            </div>
           </div>
         )}
 
@@ -570,40 +483,36 @@ const PGDetail = () => {
             {/* Left Column - Details */}
             <div className="lg:col-span-2 space-y-8">
               {/* Header with Enhanced Info */}
-              <div className="bg-white rounded-3xl p-6 shadow-lg border border-orange-100">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border">
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   <Badge className={cn(
                     "text-sm py-1 px-3",
-                    pg.type === 'boys' ? 'bg-blue-100 text-blue-700 border-blue-200' : 
-                    pg.type === 'girls' ? 'bg-pink-100 text-pink-700 border-pink-200' : 
-                    'bg-purple-100 text-purple-700 border-purple-200'
+                    pg.type === 'boys' ? 'bg-blue-100 text-blue-700' : 
+                    pg.type === 'girls' ? 'bg-pink-100 text-pink-700' : 
+                    'bg-purple-100 text-purple-700'
                   )}>
                     {pg.type === 'co-ed' ? 'Co-Ed' : pg.type.charAt(0).toUpperCase() + pg.type.slice(1)}
                   </Badge>
                   {pg.verified && (
-                    <Badge className="bg-green-100 text-green-700 border-green-200 gap-1">
+                    <Badge className="bg-green-100 text-green-700 gap-1">
                       <BadgeCheck className="h-3 w-3" />
                       Verified
                     </Badge>
                   )}
                   {pg.featured && (
-                    <Badge className="bg-orange-100 text-orange-700 border-orange-200 gap-1">
+                    <Badge className="bg-orange-100 text-orange-700 gap-1">
                       <Crown className="h-3 w-3" />
                       Featured
                     </Badge>
                   )}
-                  <Badge variant="outline" className="border-orange-200 text-orange-600">
-                    <TrendingUp className="h-3 w-3 mr-1" />
-                    Most Viewed
-                  </Badge>
                 </div>
 
-                <h1 className="font-display text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
                   {pg.name}
                 </h1>
 
-                <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-4">
-                  <div className="flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-lg">
+                <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-6">
+                  <div className="flex items-center gap-2">
                     <MapPin className="h-4 w-4 text-orange-600" />
                     <span className="font-medium">{pg.address}</span>
                   </div>
@@ -612,28 +521,24 @@ const PGDetail = () => {
                     <span className="font-bold text-gray-900">{pg.rating}</span>
                     <span>({pg.reviewCount} reviews)</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-blue-600" />
-                    <span>{Math.floor(Math.random() * 20) + 10} students staying</span>
-                  </div>
                 </div>
 
                 {/* Quick Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                  <div className="bg-orange-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-orange-600 mb-1">₹{pg.price.toLocaleString()}</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="bg-orange-50 rounded-lg p-3 text-center">
+                    <div className="text-xl font-bold text-orange-600">₹{pg.price.toLocaleString()}</div>
                     <div className="text-sm text-gray-600">Per Month</div>
                   </div>
-                  <div className="bg-blue-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-blue-600 mb-1">{pg.distance}</div>
+                  <div className="bg-blue-50 rounded-lg p-3 text-center">
+                    <div className="text-xl font-bold text-blue-600">{pg.distance}</div>
                     <div className="text-sm text-gray-600">From CU</div>
                   </div>
-                  <div className="bg-green-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-green-600 mb-1">{roomDetails.length}</div>
+                  <div className="bg-green-50 rounded-lg p-3 text-center">
+                    <div className="text-xl font-bold text-green-600">{roomDetails.length}</div>
                     <div className="text-sm text-gray-600">Room Types</div>
                   </div>
-                  <div className="bg-purple-50 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-purple-600 mb-1">{pg.amenities.length}+</div>
+                  <div className="bg-purple-50 rounded-lg p-3 text-center">
+                    <div className="text-xl font-bold text-purple-600">{pg.amenities.length}+</div>
                     <div className="text-sm text-gray-600">Amenities</div>
                   </div>
                 </div>
@@ -641,66 +546,46 @@ const PGDetail = () => {
 
               {/* Tabs Navigation */}
               <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-5 bg-gray-100 p-1 rounded-2xl">
-                  <TabsTrigger value="overview" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                <TabsList className="grid w-full grid-cols-4 bg-gray-100 p-1 rounded-xl">
+                  <TabsTrigger value="overview" className="rounded-lg data-[state=active]:bg-white">
                     Overview
                   </TabsTrigger>
-                  <TabsTrigger value="amenities" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                  <TabsTrigger value="amenities" className="rounded-lg data-[state=active]:bg-white">
                     Amenities
                   </TabsTrigger>
-                  <TabsTrigger value="rooms" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                  <TabsTrigger value="rooms" className="rounded-lg data-[state=active]:bg-white">
                     Rooms
                   </TabsTrigger>
-                  <TabsTrigger value="reviews" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
-                    Reviews
-                  </TabsTrigger>
-                  <TabsTrigger value="location" className="rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-sm">
+                  <TabsTrigger value="location" className="rounded-lg data-[state=active]:bg-white">
                     Location
                   </TabsTrigger>
                 </TabsList>
 
                 {/* Overview Tab */}
-                <TabsContent value="overview" className="space-y-6 mt-6">
-                  <div>
-                    <h2 className="font-display text-2xl font-bold text-gray-900 mb-4">About this PG</h2>
-                    <p className="text-gray-700 leading-relaxed text-lg">{pg.description}</p>
+                <TabsContent value="overview" className="mt-6">
+                  <div className="bg-white rounded-xl p-6 border">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4">About this PG</h2>
+                    <p className="text-gray-700 mb-6">{pg.description}</p>
                     
-                    {/* Highlights */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center flex-shrink-0">
-                          <Check className="h-5 w-5 text-green-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900">24/7 Security</h4>
-                          <p className="text-gray-600 text-sm">CCTV surveillance and security guards</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Wifi className="h-5 w-5 text-blue-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900">High-speed WiFi</h4>
-                          <p className="text-gray-600 text-sm">100 Mbps unlimited internet</p>
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-bold text-gray-900 mb-2">Features</h3>
+                        <div className="grid grid-cols-2 gap-2">
+                          {pg.amenities.slice(0, 6).map((amenity, index) => (
+                            <div key={index} className="flex items-center gap-2">
+                              <Check className="h-4 w-4 text-green-500" />
+                              <span className="text-gray-600">{amenity}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center flex-shrink-0">
-                          <Utensils className="h-5 w-5 text-amber-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900">Quality Food</h4>
-                          <p className="text-gray-600 text-sm">3 meals daily + evening snacks</p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                          <BookOpen className="h-5 w-5 text-purple-600" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-gray-900">Study Room</h4>
-                          <p className="text-gray-600 text-sm">Dedicated 24/7 study area</p>
+                      
+                      <div>
+                        <h3 className="font-bold text-gray-900 mb-2">Ideal For</h3>
+                        <div className="flex flex-wrap gap-2">
+                          <Badge className="bg-blue-50 text-blue-700">CU Students</Badge>
+                          <Badge className="bg-green-50 text-green-700">Working Professionals</Badge>
+                          <Badge className="bg-purple-50 text-purple-700">Exam Aspirants</Badge>
                         </div>
                       </div>
                     </div>
@@ -709,301 +594,133 @@ const PGDetail = () => {
 
                 {/* Amenities Tab */}
                 <TabsContent value="amenities" className="mt-6">
-                  <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">All Amenities</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {pg.amenities.map((amenity) => {
-                      const Icon = amenityIcons[amenity] || Check;
-                      return (
-                        <div key={amenity} className="flex items-center gap-3 p-4 bg-white border border-gray-200 rounded-xl hover:border-orange-300 hover:shadow-sm transition-all">
-                          <div className="w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center">
-                            <Icon className="h-6 w-6 text-orange-600" />
+                  <div className="bg-white rounded-xl p-6 border">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6">All Amenities</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {pg.amenities.map((amenity) => {
+                        const Icon = amenityIcons[amenity] || Check;
+                        return (
+                          <div key={amenity} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                            <div className="w-10 h-10 rounded-lg bg-white border flex items-center justify-center">
+                              <Icon className="h-5 w-5 text-orange-600" />
+                            </div>
+                            <span className="font-medium text-gray-900">{amenity}</span>
                           </div>
-                          <span className="font-medium text-gray-900">{amenity}</span>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </TabsContent>
 
                 {/* Rooms Tab */}
                 <TabsContent value="rooms" className="mt-6">
-                  <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Available Rooms</h2>
-                  <div className="space-y-4">
-                    {roomDetails.map((room, index) => (
-                      <div 
-                        key={index}
-                        className={cn(
-                          "bg-white border rounded-2xl p-6 cursor-pointer transition-all",
-                          selectedRoom === index 
-                            ? "border-orange-500 shadow-lg" 
-                            : "border-gray-200 hover:border-orange-300"
-                        )}
-                        onClick={() => setSelectedRoom(index)}
-                      >
-                        <div className="flex items-center justify-between mb-4">
-                          <div>
-                            <h3 className="font-bold text-xl text-gray-900">{room.type}</h3>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Badge className={cn(
-                                "text-xs",
-                                room.available > 2 ? "bg-green-100 text-green-700" :
-                                room.available > 0 ? "bg-yellow-100 text-yellow-700" :
-                                "bg-red-100 text-red-700"
-                              )}>
-                                {room.available} available
-                              </Badge>
-                              <span className="text-sm text-gray-600">{room.size}</span>
+                  <div className="bg-white rounded-xl p-6 border">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6">Available Rooms</h2>
+                    <div className="space-y-4">
+                      {roomDetails.map((room, index) => (
+                        <div 
+                          key={index}
+                          className={cn(
+                            "border rounded-xl p-4 transition-all",
+                            selectedRoom === index 
+                              ? "border-orange-500 bg-orange-50" 
+                              : "border-gray-200 hover:border-orange-300"
+                          )}
+                          onClick={() => setSelectedRoom(index)}
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h3 className="font-bold text-lg text-gray-900">{room.type}</h3>
+                              <div className="flex items-center gap-2 mt-1">
+                                <Badge className={cn(
+                                  "text-xs",
+                                  room.available > 2 ? "bg-green-100 text-green-700" :
+                                  room.available > 0 ? "bg-yellow-100 text-yellow-700" :
+                                  "bg-red-100 text-red-700"
+                                )}>
+                                  {room.available} available
+                                </Badge>
+                                <span className="text-sm text-gray-600">{room.size}</span>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-xl font-bold text-gray-900">₹{room.price.toLocaleString()}</div>
+                              <div className="text-sm text-gray-600">per month</div>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-2xl font-bold text-gray-900">₹{room.price.toLocaleString()}</div>
-                            <div className="text-sm text-gray-600">per month</div>
-                          </div>
                         </div>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <span className="flex items-center gap-1">
-                            <Check className="h-4 w-4 text-green-500" />
-                            All amenities included
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Check className="h-4 w-4 text-green-500" />
-                            Security deposit: ₹{Math.round(room.price * 2).toLocaleString()}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </TabsContent>
-
-                {/* Reviews Tab */}
-                <TabsContent value="reviews" className="mt-6">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="font-display text-2xl font-bold text-gray-900">Student Reviews</h2>
-                    <div className="flex items-center gap-2">
-                      <div className="text-3xl font-bold text-gray-900">{pg.rating}</div>
-                      <div>
-                        <div className="flex items-center">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={cn(
-                                "h-4 w-4",
-                                i < Math.floor(pg.rating) 
-                                  ? "fill-yellow-400 text-yellow-400" 
-                                  : "fill-gray-300 text-gray-300"
-                              )} 
-                            />
-                          ))}
-                        </div>
-                        <div className="text-sm text-gray-600">{pg.reviewCount} reviews</div>
-                      </div>
+                      ))}
                     </div>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    {reviews.map((review) => (
-                      <div key={review.id} className="bg-white border border-gray-200 rounded-2xl p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <div className="flex items-center gap-2 mb-1">
-                              <h4 className="font-bold text-gray-900">{review.name}</h4>
-                              {review.verified && (
-                                <BadgeCheck className="h-4 w-4 text-blue-500" />
-                              )}
-                            </div>
-                            <p className="text-sm text-gray-600">{review.program}</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="flex">
-                              {[...Array(5)].map((_, i) => (
-                                <Star 
-                                  key={i} 
-                                  className={cn(
-                                    "h-4 w-4",
-                                    i < review.rating 
-                                      ? "fill-yellow-400 text-yellow-400" 
-                                      : "fill-gray-300 text-gray-300"
-                                  )} 
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-gray-500">{review.date}</span>
-                          </div>
-                        </div>
-                        <p className="text-gray-700">{review.comment}</p>
-                      </div>
-                    ))}
                   </div>
                 </TabsContent>
 
                 {/* Location Tab */}
                 <TabsContent value="location" className="mt-6">
-                  <h2 className="font-display text-2xl font-bold text-gray-900 mb-6">Location & Directions</h2>
-                  <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-                    <div className="p-6">
-                      <div className="flex items-start gap-4 mb-6">
-                        <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0">
-                          <MapPin className="h-6 w-6 text-orange-600" />
+                  <div className="bg-white rounded-xl p-6 border">
+                    <h2 className="text-xl font-bold text-gray-900 mb-6">Location</h2>
+                    
+                    <div className="space-y-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                          <MapPin className="h-5 w-5 text-orange-600" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-gray-900 text-lg">{pg.address}</h3>
-                          <p className="text-gray-600 mt-1">Distance: {pg.distance} from Chandigarh University main gate</p>
-                          <div className="flex flex-wrap gap-3 mt-3">
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              className="border-orange-300"
-                              onClick={viewOnMap}
-                            >
-                              <Navigation className="h-4 w-4 mr-2" />
-                              View on Map
-                            </Button>
-                            <Button 
-                              size="sm" 
-                              variant="outline" 
-                              className="border-orange-300"
-                              onClick={() => toast.info('Getting directions...')}
-                            >
-                              <Route className="h-4 w-4 mr-2" />
-                              Get Directions
-                            </Button>
-                          </div>
+                          <h3 className="font-bold text-gray-900">{pg.address}</h3>
+                          <p className="text-gray-600 mt-1">{pg.locality} • {pg.city}</p>
+                          <p className="text-orange-600 font-medium mt-2">{pg.distance}</p>
                         </div>
                       </div>
                       
-                      {/* Nearby Places */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                        <div className="bg-gray-50 p-4 rounded-xl">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Building className="h-4 w-4 text-gray-600" />
-                            <span className="font-medium text-gray-900">Nearby Markets</span>
-                          </div>
-                          <ul className="text-sm text-gray-600 space-y-1">
-                            <li>• Gharuan Market - 1.2 km</li>
-                            <li>• Sector 115 Market - 2.5 km</li>
-                            <li>• Kharar Market - 5 km</li>
-                          </ul>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-xl">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Car className="h-4 w-4 text-gray-600" />
-                            <span className="font-medium text-gray-900">Transport</span>
-                          </div>
-                          <ul className="text-sm text-gray-600 space-y-1">
-                            <li>• Bus Stop - 300 m</li>
-                            <li>• Auto Stand - 500 m</li>
-                            <li>• Taxi Service - 24/7</li>
-                          </ul>
-                        </div>
-                        <div className="bg-gray-50 p-4 rounded-xl">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Shield className="h-4 w-4 text-gray-600" />
-                            <span className="font-medium text-gray-900">Safety</span>
-                          </div>
-                          <ul className="text-sm text-gray-600 space-y-1">
-                            <li>• Police Station - 3 km</li>
-                            <li>• Hospital - 4 km</li>
-                            <li>• Pharmacy - 1 km</li>
-                          </ul>
+                      <div className="h-48 bg-gradient-to-r from-orange-100 to-amber-100 rounded-lg flex items-center justify-center">
+                        <div className="text-center">
+                          <Building className="h-8 w-8 text-orange-500 mx-auto mb-2" />
+                          <h4 className="font-bold text-gray-900 mb-1">Near Chandigarh University</h4>
+                          <p className="text-gray-600 text-sm">Easy access to all CU gates</p>
                         </div>
                       </div>
-                    </div>
-                    
-                    {/* Map Placeholder */}
-                    <div className="h-64 bg-gradient-to-r from-orange-50 to-amber-50 flex flex-col items-center justify-center border-t">
-                      <MapIcon className="h-16 w-16 text-orange-300 mb-4" />
-                      <p className="text-gray-700">Interactive map showing exact location</p>
+                      
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                          <h4 className="font-bold text-gray-900 text-sm mb-1">Nearby</h4>
+                          <p className="text-xs text-gray-600">• CU Gate 1: 5min walk</p>
+                          <p className="text-xs text-gray-600">• Library: 10min walk</p>
+                        </div>
+                        <div className="p-3 bg-gray-50 rounded-lg">
+                          <h4 className="font-bold text-gray-900 text-sm mb-1">Transport</h4>
+                          <p className="text-xs text-gray-600">• Auto stand: 2min walk</p>
+                          <p className="text-xs text-gray-600">• Bus stop: 5min walk</p>
+                        </div>
+                      </div>
+                      
                       <Button 
-                        variant="outline" 
-                        className="mt-4 border-orange-300"
                         onClick={viewOnMap}
+                        className="w-full bg-orange-600 hover:bg-orange-700 gap-2"
                       >
-                        Open in Google Maps
+                        <Navigation className="h-4 w-4" />
+                        View on Google Maps
                       </Button>
                     </div>
                   </div>
                 </TabsContent>
               </Tabs>
-
-              {/* Video Tour */}
-              <div className="bg-white rounded-3xl p-6 shadow-lg border border-orange-100">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <h2 className="font-display text-2xl font-bold text-gray-900 mb-2">Video Tour</h2>
-                    <p className="text-gray-600">Take a virtual walkthrough of the PG</p>
-                  </div>
-                  <Button
-                    variant="outline"
-                    className="border-orange-300"
-                    onClick={() => setShow360Tour(true)}
-                  >
-                    <Video className="h-4 w-4 mr-2" />
-                    360° Virtual Tour
-                  </Button>
-                </div>
-                
-                <div className="relative rounded-xl overflow-hidden bg-black">
-                  <div className="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-                    <div className="text-center text-white">
-                      <Video className="h-16 w-16 mx-auto mb-4" />
-                      <h3 className="text-xl font-bold mb-2">PG Walkthrough Video</h3>
-                      <p className="text-white/80">Full property tour available</p>
-                    </div>
-                  </div>
-                  
-                  <div className="absolute bottom-4 right-4 flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30"
-                      onClick={toggleVideoPlay}
-                    >
-                      {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="bg-white/20 backdrop-blur-sm text-white hover:bg-white/30"
-                      onClick={toggleFullscreen}
-                    >
-                      {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-                    </Button>
-                  </div>
-                </div>
-                
-                <video ref={videoRef} className="hidden">
-                  <source src="https://assets.mixkit.co/videos/preview/mixkit-interior-of-a-modern-apartment-4153-large.mp4" type="video/mp4" />
-                </video>
-              </div>
             </div>
 
             {/* Right Column - Booking & Contact */}
             <div className="space-y-6">
               {/* Price Calculator Card */}
-              <div className="bg-white rounded-2xl p-6 shadow-lg border border-orange-100 sticky top-24">
+              <div className="bg-white rounded-2xl p-6 shadow-sm border sticky top-24">
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2 mb-2">
-                    <span className="font-display text-3xl font-bold text-gray-900">
+                    <span className="text-2xl font-bold text-gray-900">
                       ₹{pg.price.toLocaleString()}
                     </span>
                     <span className="text-gray-600">/month</span>
                   </div>
-                  {pg.originalPrice && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-gray-500 line-through text-sm">
-                        ₹{pg.originalPrice.toLocaleString()}
-                      </span>
-                      <Badge className="bg-green-100 text-green-700 border-green-200">
-                        <Percent className="h-3 w-3 mr-1" />
-                        {Math.round((1 - pg.price / pg.originalPrice) * 100)}% OFF
-                      </Badge>
-                    </div>
-                  )}
                   
-                  {/* Booking Duration Slider */}
-                  <div className="mt-6">
+                  {/* Booking Duration */}
+                  <div className="mt-4">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">Booking Duration</span>
+                      <span className="text-sm font-medium text-gray-700">Duration</span>
                       <span className="text-sm font-bold text-orange-600">{bookingMonths} months</span>
                     </div>
                     <Slider
@@ -1014,17 +731,12 @@ const PGDetail = () => {
                       onValueChange={([value]) => setBookingMonths(value)}
                       className="w-full"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      <span>1 month</span>
-                      <span>6 months</span>
-                      <span>12 months</span>
-                    </div>
                   </div>
                   
                   {/* Price Calculation */}
                   <div className="mt-6 space-y-3">
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Base price ({bookingMonths} months)</span>
+                      <span className="text-gray-600">Base ({bookingMonths} months)</span>
                       <span className="font-medium">₹{(pg.price * bookingMonths).toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-sm">
@@ -1033,16 +745,13 @@ const PGDetail = () => {
                     </div>
                     <Separator />
                     <div className="flex justify-between text-lg font-bold">
-                      <span className="text-gray-900">Total Amount</span>
+                      <span className="text-gray-900">Total</span>
                       <span className="text-orange-600">₹{calculatedPrice.toLocaleString()}</span>
-                    </div>
-                    <div className="text-sm text-gray-500 text-center">
-                      Save ₹{totalSavings.toLocaleString()} with {bookingMonths} months booking
                     </div>
                   </div>
                 </div>
 
-                {/* Main Action Buttons */}
+                {/* Action Buttons */}
                 <div className="space-y-3 mb-6">
                   <Button 
                     onClick={handleContactOwner} 
@@ -1060,126 +769,72 @@ const PGDetail = () => {
                     className="w-full border-orange-300 hover:bg-orange-50 gap-2"
                   >
                     <MessageCircle className="h-4 w-4" />
-                    WhatsApp Owner
+                    WhatsApp
                   </Button>
-                  
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button 
-                      onClick={scheduleVisit}
-                      variant="outline" 
-                      size="sm"
-                      className="border-orange-300"
-                    >
-                      <Calendar className="h-4 w-4 mr-2" />
-                      Schedule Visit
-                    </Button>
-                    <Button 
-                      onClick={calculateEMI}
-                      variant="outline" 
-                      size="sm"
-                      className="border-orange-300"
-                    >
-                      <Calculator className="h-4 w-4 mr-2" />
-                      Calculate EMI
-                    </Button>
-                  </div>
                 </div>
 
                 {/* Owner Info */}
-                <div className="pt-6 border-t border-gray-200">
+                <div className="pt-6 border-t">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center">
-                      <span className="font-display font-bold text-white text-lg">
-                        {pg.ownerName.charAt(0)}
-                      </span>
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 flex items-center justify-center">
+                      <UsersIcon className="h-6 w-6 text-white" />
                     </div>
                     <div>
                       <p className="font-bold text-gray-900">{pg.ownerName}</p>
                       <p className="text-gray-600 text-sm">Property Owner</p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <BadgeCheck className="h-4 w-4 text-green-500" />
-                        <span className="text-xs text-green-600">Verified Owner</span>
-                      </div>
                     </div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2">
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      className="text-gray-600 hover:text-orange-600"
-                      onClick={() => toast.info('Calling owner...')}
-                    >
-                      <PhoneCall className="h-4 w-4 mr-2" />
-                      Call
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      className="text-gray-600 hover:text-orange-600"
-                      onClick={() => window.location.href = `mailto:owner@example.com?subject=Regarding ${pg.name}`}
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      Email
-                    </Button>
+                    <a href={`tel:${pg.ownerPhone}`}>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="w-full text-gray-600 hover:text-orange-600"
+                      >
+                        <PhoneCall className="h-4 w-4 mr-2" />
+                        Call
+                      </Button>
+                    </a>
+                    <a href={`mailto:${pg.ownerEmail}`}>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="w-full text-gray-600 hover:text-orange-600"
+                      >
+                        <Mail className="h-4 w-4 mr-2" />
+                        Email
+                      </Button>
+                    </a>
                   </div>
                 </div>
               </div>
 
               {/* Quick Info Cards */}
-              <div className="space-y-4">
-                <div className="bg-white rounded-2xl p-4 border border-gray-200">
+              <div className="space-y-3">
+                <div className="bg-white rounded-xl p-4 border">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <Clock className="h-5 w-5 text-blue-600" />
+                    <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                      <Clock className="h-4 w-4 text-blue-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Response Time</p>
-                      <p className="text-sm text-gray-600">Usually within 30 minutes</p>
+                      <p className="font-medium text-gray-900 text-sm">Quick Response</p>
+                      <p className="text-xs text-gray-600">Usually within 30 min</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="bg-white rounded-2xl p-4 border border-gray-200">
+                <div className="bg-white rounded-xl p-4 border">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
-                      <Check className="h-5 w-5 text-green-600" />
+                    <div className="w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">
+                      <Check className="h-4 w-4 text-green-600" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Booking Guarantee</p>
-                      <p className="text-sm text-gray-600">100% refund if not satisfied</p>
+                      <p className="font-medium text-gray-900 text-sm">Verified PG</p>
+                      <p className="text-xs text-gray-600">100% authentic listing</p>
                     </div>
                   </div>
                 </div>
-                
-                <div className="bg-white rounded-2xl p-4 border border-gray-200">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
-                      <Shield className="h-5 w-5 text-purple-600" />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900">Safe & Secure</p>
-                      <p className="text-sm text-gray-600">Verified by our team</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Download Brochure */}
-              <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-6 text-white">
-                <FileText className="h-10 w-10 mx-auto mb-4" />
-                <h3 className="font-bold text-lg text-center mb-2">Download Brochure</h3>
-                <p className="text-white/80 text-sm text-center mb-4">
-                  Get complete details, floor plans, and pricing
-                </p>
-                <Button 
-                  variant="secondary" 
-                  className="w-full bg-white text-orange-600 hover:bg-orange-50"
-                  onClick={downloadBrochure}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Download PDF
-                </Button>
               </div>
             </div>
           </div>
@@ -1189,67 +844,42 @@ const PGDetail = () => {
       {/* Contact Form Modal */}
       {showContactForm && (
         <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl max-w-md w-full">
             <div className="p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="font-display text-2xl font-bold text-gray-900">Contact Owner</h2>
+                <h2 className="text-xl font-bold text-gray-900">Contact Owner</h2>
                 <button
                   onClick={() => setShowContactForm(false)}
-                  className="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
+                  className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
               
               <form onSubmit={handleContactSubmit} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name
+                    Name
                   </label>
                   <input
                     type="text"
                     value={contactData.name}
                     onChange={(e) => setContactData(prev => ({ ...prev, name: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 outline-none"
                     required
                   />
                 </div>
                 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number
+                    Phone
                   </label>
                   <input
                     type="tel"
                     value={contactData.phone}
                     onChange={(e) => setContactData(prev => ({ ...prev, phone: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 outline-none"
                     required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={contactData.email}
-                    onChange={(e) => setContactData(prev => ({ ...prev, email: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Preferred Visit Date
-                  </label>
-                  <input
-                    type="date"
-                    value={contactData.visitDate}
-                    onChange={(e) => setContactData(prev => ({ ...prev, visitDate: e.target.value }))}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
                   />
                 </div>
                 
@@ -1261,8 +891,8 @@ const PGDetail = () => {
                     value={contactData.message}
                     onChange={(e) => setContactData(prev => ({ ...prev, message: e.target.value }))}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
-                    placeholder="Tell the owner about your requirements..."
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:border-orange-500 outline-none"
+                    placeholder="I'm interested in this PG..."
                   />
                 </div>
                 
@@ -1270,10 +900,6 @@ const PGDetail = () => {
                   Send Message
                 </Button>
               </form>
-              
-              <p className="text-sm text-gray-500 mt-6 text-center">
-                We'll share your contact details with the owner
-              </p>
             </div>
           </div>
         </div>

@@ -1,48 +1,86 @@
-import React, { createContext, useContext, ReactNode } from 'react';
-import { useLocalStorage } from '@/lib/hooks/useLocalStorage';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 
 interface WishlistContextType {
   wishlist: string[];
-  addToWishlist: (id: string) => void;
-  removeFromWishlist: (id: string) => void;
-  isInWishlist: (id: string) => boolean;
-  toggleWishlist: (id: string) => void;
+  isInWishlist: (pgId: string) => boolean;
+  addToWishlist: (pgId: string) => void;
+  removeFromWishlist: (pgId: string) => void;
+  toggleWishlist: (pgId: string) => void;
+  clearWishlist: () => void;
 }
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
-export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [wishlist, setWishlist] = useLocalStorage<string[]>('cu-pg-wishlist', []);
+interface WishlistProviderProps {
+  children: ReactNode;
+}
 
-  const addToWishlist = (id: string) => {
-    setWishlist((prev) => [...prev, id]);
-  };
-
-  const removeFromWishlist = (id: string) => {
-    setWishlist((prev) => prev.filter((item) => item !== id));
-  };
-
-  const isInWishlist = (id: string) => wishlist.includes(id);
-
-  const toggleWishlist = (id: string) => {
-    if (isInWishlist(id)) {
-      removeFromWishlist(id);
-    } else {
-      addToWishlist(id);
+export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) => {
+  const [wishlist, setWishlist] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return [];
+    try {
+      const saved = localStorage.getItem('pg-wishlist');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
     }
-  };
+  });
+
+  // Sync wishlist to localStorage
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem('pg-wishlist', JSON.stringify(wishlist));
+    } catch {}
+  }, [wishlist]);
+
+  const isInWishlist = useCallback((pgId: string) => {
+    return wishlist.includes(pgId);
+  }, [wishlist]);
+
+  const addToWishlist = useCallback((pgId: string) => {
+    setWishlist(prev => {
+      if (!prev.includes(pgId)) {
+        return [...prev, pgId];
+      }
+      return prev;
+    });
+  }, []);
+
+  const removeFromWishlist = useCallback((pgId: string) => {
+    setWishlist(prev => prev.filter(id => id !== pgId));
+  }, []);
+
+  const toggleWishlist = useCallback((pgId: string) => {
+    setWishlist(prev => {
+      if (prev.includes(pgId)) {
+        return prev.filter(id => id !== pgId);
+      } else {
+        return [...prev, pgId];
+      }
+    });
+  }, []);
+
+  const clearWishlist = useCallback(() => {
+    setWishlist([]);
+  }, []);
 
   return (
-    <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, isInWishlist, toggleWishlist }}>
+    <WishlistContext.Provider value={{ 
+      wishlist, 
+      isInWishlist, 
+      addToWishlist, 
+      removeFromWishlist, 
+      toggleWishlist, 
+      clearWishlist 
+    }}>
       {children}
     </WishlistContext.Provider>
   );
-}
+};
 
-export function useWishlist() {
+export const useWishlist = (): WishlistContextType => {
   const context = useContext(WishlistContext);
-  if (context === undefined) {
-    throw new Error('useWishlist must be used within a WishlistProvider');
-  }
+  if (!context) throw new Error('useWishlist must be used within a WishlistProvider');
   return context;
-}
+};

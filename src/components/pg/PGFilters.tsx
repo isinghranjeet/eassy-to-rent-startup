@@ -1,24 +1,8 @@
-import { useState } from 'react';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+// components/pg/PGFilters.tsx
+import { Search, Filter, X } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { locations, amenitiesList, priceRanges } from '@/lib/data/pgData';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { Checkbox } from '@/components/ui/checkbox';
 
 interface PGFiltersProps {
   searchQuery: string;
@@ -28,13 +12,16 @@ interface PGFiltersProps {
   selectedType: string;
   setSelectedType: (type: string) => void;
   selectedPriceRange: number;
-  setSelectedPriceRange: (index: number) => void;
+  setSelectedPriceRange: (range: number) => void;
   selectedAmenities: string[];
   setSelectedAmenities: (amenities: string[]) => void;
   onClearFilters: () => void;
+  locations: string[];
+  amenities: string[];
+  priceRanges: Array<{ min: number; max: number; label: string }>;
 }
 
-export function PGFilters({
+export const PGFilters = ({
   searchQuery,
   setSearchQuery,
   selectedLocation,
@@ -46,235 +33,177 @@ export function PGFilters({
   selectedAmenities,
   setSelectedAmenities,
   onClearFilters,
-}: PGFiltersProps) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleAmenity = (amenity: string) => {
-    if (selectedAmenities.includes(amenity)) {
-      setSelectedAmenities(selectedAmenities.filter((a) => a !== amenity));
-    } else {
-      setSelectedAmenities([...selectedAmenities, amenity]);
-    }
-  };
-
-  const hasActiveFilters =
-    selectedLocation !== 'All Locations' ||
-    selectedType !== 'all' ||
-    selectedPriceRange !== 0 ||
+  locations,
+  amenities,
+  priceRanges,
+}: PGFiltersProps) => {
+  const hasActiveFilters = 
+    searchQuery || 
+    selectedLocation !== 'All Locations' || 
+    selectedType !== 'all' || 
+    selectedPriceRange !== 0 || 
     selectedAmenities.length > 0;
 
-  const FilterContent = () => (
+  return (
     <div className="space-y-6">
-      {/* Location Filter */}
-      <div>
-        <label className="text-sm font-medium mb-2 block">Location</label>
-        <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select location" />
-          </SelectTrigger>
-          <SelectContent>
+      {/* Search Bar */}
+      <div className="relative">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+        <Input
+          type="text"
+          placeholder="Search by PG name, location, or amenities..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-12 h-12 text-lg"
+        />
+      </div>
+
+      {/* Filters Row */}
+      <div className="flex flex-wrap gap-4">
+        {/* Location Filter */}
+        <div className="flex-1 min-w-[200px]">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Location
+          </label>
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
+          >
             {locations.map((location) => (
-              <SelectItem key={location} value={location}>
+              <option key={location} value={location}>
                 {location}
-              </SelectItem>
+              </option>
             ))}
-          </SelectContent>
-        </Select>
-      </div>
+          </select>
+        </div>
 
-      {/* Type Filter */}
-      <div>
-        <label className="text-sm font-medium mb-2 block">Type</label>
-        <Select value={selectedType} onValueChange={setSelectedType}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="boys">Boys</SelectItem>
-            <SelectItem value="girls">Girls</SelectItem>
-            <SelectItem value="co-ed">Co-Ed</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+        {/* Type Filter */}
+        <div className="flex-1 min-w-[150px]">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            PG Type
+          </label>
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
+          >
+            <option value="all">All Types</option>
+            <option value="boys">Boys</option>
+            <option value="girls">Girls</option>
+            <option value="co-ed">Co-Ed</option>
+          </select>
+        </div>
 
-      {/* Price Range Filter */}
-      <div>
-        <label className="text-sm font-medium mb-2 block">Price Range</label>
-        <Select
-          value={selectedPriceRange.toString()}
-          onValueChange={(v) => setSelectedPriceRange(parseInt(v))}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select price range" />
-          </SelectTrigger>
-          <SelectContent>
+        {/* Price Range Filter */}
+        <div className="flex-1 min-w-[200px]">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Price Range
+          </label>
+          <select
+            value={selectedPriceRange}
+            onChange={(e) => setSelectedPriceRange(Number(e.target.value))}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none"
+          >
+            <option value={0}>All Prices</option>
             {priceRanges.map((range, index) => (
-              <SelectItem key={index} value={index.toString()}>
+              <option key={index} value={index + 1}>
                 {range.label}
-              </SelectItem>
+              </option>
             ))}
-          </SelectContent>
-        </Select>
+          </select>
+        </div>
       </div>
 
       {/* Amenities Filter */}
       <div>
-        <label className="text-sm font-medium mb-3 block">Amenities</label>
-        <div className="grid grid-cols-2 gap-2">
-          {amenitiesList.map((amenity) => (
-            <label
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Amenities
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {amenities.slice(0, 10).map((amenity) => (
+            <Badge
               key={amenity}
-              className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-muted transition-colors"
+              variant={selectedAmenities.includes(amenity) ? "default" : "outline"}
+              className="cursor-pointer"
+              onClick={() => {
+                if (selectedAmenities.includes(amenity)) {
+                  setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
+                } else {
+                  setSelectedAmenities([...selectedAmenities, amenity]);
+                }
+              }}
             >
-              <Checkbox
-                checked={selectedAmenities.includes(amenity)}
-                onCheckedChange={() => toggleAmenity(amenity)}
-              />
-              <span className="text-sm">{amenity}</span>
-            </label>
+              {amenity}
+              {selectedAmenities.includes(amenity) && (
+                <X className="ml-1 h-3 w-3" />
+              )}
+            </Badge>
           ))}
+          {amenities.length > 10 && (
+            <span className="text-sm text-gray-500 self-center ml-2">
+              +{amenities.length - 10} more
+            </span>
+          )}
         </div>
       </div>
 
-      {/* Clear Filters */}
+      {/* Active Filters & Clear Button */}
       {hasActiveFilters && (
-        <Button variant="outline" onClick={onClearFilters} className="w-full">
-          Clear All Filters
-        </Button>
-      )}
-    </div>
-  );
-
-  return (
-    <div className="space-y-4">
-      {/* Search and Filter Bar */}
-      <div className="flex gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search PG by name or location..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-
-        {/* Desktop Filters */}
-        <div className="hidden lg:flex gap-2">
-          <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Location" />
-            </SelectTrigger>
-            <SelectContent>
-              {locations.map((location) => (
-                <SelectItem key={location} value={location}>
-                  {location}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          <Select value={selectedType} onValueChange={setSelectedType}>
-            <SelectTrigger className="w-[130px]">
-              <SelectValue placeholder="Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="boys">Boys</SelectItem>
-              <SelectItem value="girls">Girls</SelectItem>
-              <SelectItem value="co-ed">Co-Ed</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select
-            value={selectedPriceRange.toString()}
-            onValueChange={(v) => setSelectedPriceRange(parseInt(v))}
-          >
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="Price Range" />
-            </SelectTrigger>
-            <SelectContent>
-              {priceRanges.map((range, index) => (
-                <SelectItem key={index} value={index.toString()}>
-                  {range.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Mobile Filter Button */}
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild className="lg:hidden">
-            <Button variant="outline" size="icon" className="relative">
-              <SlidersHorizontal className="h-4 w-4" />
-              {hasActiveFilters && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
-                  !
-                </span>
-              )}
-            </Button>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Filters</SheetTitle>
-            </SheetHeader>
-            <div className="mt-6">
-              <FilterContent />
-            </div>
-          </SheetContent>
-        </Sheet>
-
-        {hasActiveFilters && (
+        <div className="flex items-center justify-between pt-4 border-t">
+          <div className="flex flex-wrap gap-2">
+            {searchQuery && (
+              <Badge variant="secondary" className="gap-1">
+                Search: {searchQuery}
+                <button onClick={() => setSearchQuery('')}>
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            )}
+            {selectedLocation !== 'All Locations' && (
+              <Badge variant="secondary" className="gap-1">
+                Location: {selectedLocation}
+                <button onClick={() => setSelectedLocation('All Locations')}>
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            )}
+            {selectedType !== 'all' && (
+              <Badge variant="secondary" className="gap-1">
+                Type: {selectedType}
+                <button onClick={() => setSelectedType('all')}>
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            )}
+            {selectedPriceRange !== 0 && (
+              <Badge variant="secondary" className="gap-1">
+                Price: {priceRanges[selectedPriceRange].label}
+                <button onClick={() => setSelectedPriceRange(0)}>
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            )}
+            {selectedAmenities.map(amenity => (
+              <Badge key={amenity} variant="secondary" className="gap-1">
+                {amenity}
+                <button onClick={() => setSelectedAmenities(selectedAmenities.filter(a => a !== amenity))}>
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            ))}
+          </div>
+          
           <Button
             variant="ghost"
-            size="icon"
+            size="sm"
             onClick={onClearFilters}
-            className="hidden lg:flex"
+            className="text-gray-600 hover:text-gray-900"
           >
-            <X className="h-4 w-4" />
+            Clear all
           </Button>
-        )}
-      </div>
-
-      {/* Active Filter Badges */}
-      {hasActiveFilters && (
-        <div className="flex flex-wrap gap-2">
-          {selectedLocation !== 'All Locations' && (
-            <Badge variant="secondary" className="gap-1">
-              {selectedLocation}
-              <button onClick={() => setSelectedLocation('All Locations')}>
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          )}
-          {selectedType !== 'all' && (
-            <Badge variant="secondary" className="gap-1">
-              {selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
-              <button onClick={() => setSelectedType('all')}>
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          )}
-          {selectedPriceRange !== 0 && (
-            <Badge variant="secondary" className="gap-1">
-              {priceRanges[selectedPriceRange].label}
-              <button onClick={() => setSelectedPriceRange(0)}>
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          )}
-          {selectedAmenities.map((amenity) => (
-            <Badge key={amenity} variant="secondary" className="gap-1">
-              {amenity}
-              <button onClick={() => toggleAmenity(amenity)}>
-                <X className="h-3 w-3" />
-              </button>
-            </Badge>
-          ))}
         </div>
       )}
     </div>
   );
-}
+};

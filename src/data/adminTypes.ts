@@ -1,11 +1,16 @@
+// data/adminTypes.ts
 export interface PGListing {
-  id: string;
-  slug: string;
+  _id: string;
   name: string;
+  location: {
+    type: string;
+    coordinates: number[];
+  };
   address: string;
+  city: string;
+  locality: string;
   price: number;
-  originalPrice?: number;
-  type: 'boys' | 'girls' | 'co-ed';
+  type: 'boys' | 'girls' | 'co-ed' | 'family';
   rating: number;
   reviewCount: number;
   description: string;
@@ -13,18 +18,18 @@ export interface PGListing {
   amenities: string[];
   roomTypes: string[];
   distance: string;
-  availability: 'available' | 'limited' | 'full';
+  availability: string;
   verified: boolean;
   featured: boolean;
+  published: boolean;
   ownerName: string;
   ownerPhone: string;
   ownerEmail: string;
-  published: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface AdminStats {
+export interface PGStats {
   total: number;
   published: number;
   draft: number;
