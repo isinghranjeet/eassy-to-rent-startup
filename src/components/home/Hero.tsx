@@ -34,7 +34,7 @@ export function Hero() {
 
   return (
     <section className="relative min-h-[85vh] flex items-center overflow-hidden">
-      {/* Background Pattern */}
+      {/* Background Pattern - EXACTLY LIKE SCREENSHOT */}
       <div className="absolute inset-0 hero-gradient opacity-95" />
       <div 
         className="absolute inset-0 opacity-10"
@@ -43,26 +43,26 @@ export function Hero() {
         }}
       />
       
-      {/* Floating Elements */}
+      {/* Floating Elements - EXACTLY LIKE SCREENSHOT */}
       <div className="absolute top-20 right-10 w-72 h-72 bg-primary-foreground/10 rounded-full blur-3xl animate-float" />
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '-1.5s' }} />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Badge */}
+          {/* Badge - Orange */}
           <div className="inline-flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6 animate-fade-up">
-            <span className="w-2 h-2 bg-secondary rounded-full animate-pulse-soft" />
-            <span className="text-primary-foreground/90 text-sm font-medium">
+            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse-soft" />
+            <span className="text-orange-600 dark:text-orange-500 text-sm font-medium">
               #1 PG Finder for CU Students
             </span>
           </div>
 
-          {/* Heading */}
+          {/* Heading - Orange Accent */}
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 animate-fade-up" style={{ animationDelay: '100ms' }}>
             Find Your Perfect{' '}
             <span className="relative">
-              <span className="relative z-10">Home Away</span>
-              <span className="absolute bottom-2 left-0 w-full h-3 bg-secondary/50 -z-0" />
+              <span className="relative z-10 text-orange-500">Home Away</span>
+              <span className="absolute bottom-2 left-0 w-full h-3 bg-orange-400/30 -z-0" />
             </span>{' '}
             From Home
           </h1>
@@ -80,12 +80,12 @@ export function Hero() {
                   placeholder="Search by PG name..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-12"
+                  className="pl-10 h-12 focus:border-orange-400 focus:ring-orange-400"
                 />
               </div>
               
               <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                <SelectTrigger className="h-12">
+                <SelectTrigger className="h-12 focus:border-orange-400 focus:ring-orange-400">
                   <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
@@ -99,7 +99,7 @@ export function Hero() {
               </Select>
 
               <Select value={selectedType} onValueChange={setSelectedType}>
-                <SelectTrigger className="h-12">
+                <SelectTrigger className="h-12 focus:border-orange-400 focus:ring-orange-400">
                   <Users className="h-4 w-4 mr-2 text-muted-foreground" />
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
@@ -111,30 +111,31 @@ export function Hero() {
               </Select>
             </div>
 
-            <Button onClick={handleSearch} size="xl" className="w-full md:w-auto mt-4">
+            {/* Orange Button */}
+            <Button onClick={handleSearch} size="xl" className="w-full md:w-auto mt-4 bg-orange-500 hover:bg-orange-600 text-white">
               <Search className="h-5 w-5 mr-2" />
               Search PGs
             </Button>
           </div>
 
-          {/* Stats */}
+          {/* Stats - Light Sky Blue Text */}
           <div className="flex flex-wrap justify-center gap-8 md:gap-16 mt-12 animate-fade-up" style={{ animationDelay: '400ms' }}>
             {stats.map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="flex items-center justify-center gap-2 mb-1">
-                  <stat.icon className="h-5 w-5 text-secondary" />
-                  <span className="font-display text-2xl md:text-3xl font-bold text-primary-foreground">
+                  <stat.icon className="h-5 w-5 text-orange-500" />
+                  <span className="font-display text-2xl md:text-3xl font-bold text-sky-500">
                     {stat.value}
                   </span>
                 </div>
-                <span className="text-primary-foreground/70 text-sm">{stat.label}</span>
+                <span className="text-sky-400 text-sm">{stat.label}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Bottom Wave */}
+      {/* Bottom Wave - EXACTLY LIKE SCREENSHOT */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
           <path

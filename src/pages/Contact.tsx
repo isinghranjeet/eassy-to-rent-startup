@@ -101,7 +101,7 @@ const MockCAPTCHA = ({ onChange }: { onChange: (token: string | null) => void })
         {!isVerified && (
           <Button
             variant="outline"
-            className="w-full mt-3 border-gray-300"
+            className="w-full mt-3 border-gray-300 hover:border-orange-400 hover:text-orange-600"
             onClick={handleVerify}
           >
             Verify Security Check
@@ -206,14 +206,14 @@ const DistanceCalculator = () => {
           </div>
           <div>
             <h3 className="font-semibold text-gray-900">Distance from Chandigarh University</h3>
-            <p className="text-sm text-gray-600">Calculate your current distance</p>
+            <p className="text-sm text-sky-600">Calculate your current distance</p>
           </div>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setIsMapExpanded(!isMapExpanded)}
-          className="text-gray-600"
+          className="text-gray-600 hover:text-orange-600"
         >
           {isMapExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </Button>
@@ -226,11 +226,11 @@ const DistanceCalculator = () => {
             <MapPinned className="h-12 w-12 text-orange-600/30 mb-4" />
             <div className="text-center mb-4">
               <p className="font-medium text-gray-900 mb-1">Chandigarh University</p>
-              <p className="text-sm text-gray-600">Gharuan, Mohali, Punjab</p>
+              <p className="text-sm text-sky-600">Gharuan, Mohali, Punjab</p>
             </div>
             
             {userLocation && (
-              <div className="flex items-center gap-2 text-sm text-gray-700 bg-white/80 px-3 py-2 rounded-lg">
+              <div className="flex items-center gap-2 text-sm text-sky-600 bg-white/80 px-3 py-2 rounded-lg">
                 <Navigation2 className="h-4 w-4 text-green-600" />
                 <span>Your location detected</span>
               </div>
@@ -245,7 +245,7 @@ const DistanceCalculator = () => {
                   <Navigation className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Distance to CU</p>
+                  <p className="text-sm text-sky-600">Distance to CU</p>
                   <p className="text-lg font-semibold text-gray-900">{distance} km</p>
                 </div>
               </div>
@@ -261,7 +261,7 @@ const DistanceCalculator = () => {
               <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-medium text-gray-900">Distance Calculated</p>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-sky-600 mt-1">
                   You are approximately {distance} km from Chandigarh University.
                   {parseFloat(distance) < 5 && " You're in the immediate vicinity."}
                 </p>
@@ -274,7 +274,7 @@ const DistanceCalculator = () => {
               <MapPin className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
               <div>
                 <p className="font-medium text-gray-900">Location Detection Required</p>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-sky-600 mt-1">
                   Enable location services to calculate distance and find nearby PG accommodations.
                 </p>
               </div>
@@ -304,7 +304,7 @@ const DistanceCalculator = () => {
           <Button
             variant="outline"
             onClick={openGoogleMaps}
-            className="flex-1 min-w-[140px] gap-2 border-orange-300 hover:border-orange-400 hover:bg-orange-50"
+            className="flex-1 min-w-[140px] gap-2 border-orange-300 hover:border-orange-400 hover:bg-orange-50 text-gray-700 hover:text-orange-600"
           >
             <Map className="h-4 w-4" />
             View on Maps
@@ -312,14 +312,14 @@ const DistanceCalculator = () => {
         </div>
 
         <div className="pt-4 border-t">
-          <p className="text-sm text-gray-600 mb-3">Nearby PG Accommodations</p>
+          <p className="text-sm text-sky-600 mb-3">Nearby PG Accommodations</p>
           <div className="flex flex-wrap gap-2">
             {['Within 1km', '1-3km', '3-5km', '5-10km'].map((range) => (
               <Button
                 key={range}
                 variant="ghost"
                 size="sm"
-                className="text-xs hover:bg-orange-50 hover:text-orange-600"
+                className="text-xs text-sky-600 hover:bg-orange-50 hover:text-orange-600"
                 onClick={() => toast.info(`Searching for PGs ${range} from CU`)}
               >
                 {range}
@@ -707,7 +707,7 @@ const Contact = () => {
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">Support Assistant</h3>
-              <p className="text-xs text-green-600 flex items-center gap-1">
+              <p className="text-xs text-sky-600 flex items-center gap-1">
                 <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 Online - Quick response
               </p>
@@ -717,7 +717,7 @@ const Contact = () => {
             variant="ghost"
             size="sm"
             onClick={() => setIsChatOpen(false)}
-            className="h-8 w-8 p-0 text-gray-500 hover:text-gray-700"
+            className="h-8 w-8 p-0 text-gray-500 hover:text-orange-600"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -747,7 +747,7 @@ const Contact = () => {
             onChange={(e) => setChatMessage(e.target.value)}
             placeholder="Type your message here..."
             onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-            className="flex-1"
+            className="flex-1 focus:border-orange-400 focus:ring-orange-400"
           />
           <Button 
             onClick={sendChatMessage}
@@ -762,18 +762,38 @@ const Contact = () => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-50">
       <Navbar />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="relative py-16 md:py-20 bg-gradient-to-r from-gray-900 to-gray-800">
-          <div className="absolute inset-0 bg-grid-white/5" />
+        <section className="relative py-16 md:py-20">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 hero-gradient opacity-95" />
+          <div 
+            className="absolute inset-0 opacity-10"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+            }}
+          />
+          
+          {/* Floating Elements */}
+          <div className="absolute top-20 right-10 w-72 h-72 bg-primary-foreground/10 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-orange-400/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '-1.5s' }} />
+
           <div className="container relative mx-auto px-4">
             <div className="max-w-3xl">
-              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-orange-400/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6 animate-fade-up border border-orange-400/20">
+                <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse-soft" />
+                <span className="text-orange-600 text-sm font-medium">
+                  #1 PG Finder for CU Students
+                </span>
+              </div>
+
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 Contact Our Professional Team
               </h1>
-              <p className="text-gray-300 text-lg mb-8">
+              <p className="text-gray-700 text-lg mb-8">
                 We provide comprehensive support for PG accommodation needs near Chandigarh University. 
                 Our dedicated team is available to assist you with bookings, inquiries, and personalized consultations.
               </p>
@@ -782,7 +802,7 @@ const Contact = () => {
                   <Button
                     key={topic.id}
                     variant="secondary"
-                    className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 gap-2"
+                    className="bg-white/10 backdrop-blur-sm border-orange-400/20 text-gray-700 hover:bg-orange-50 hover:text-orange-600 gap-2"
                     onClick={() => handleFAQClick(topic.id)}
                   >
                     <topic.icon className="h-4 w-4" />
@@ -814,9 +834,9 @@ const Contact = () => {
                           </div>
                           <div className="flex-1 min-w-0">
                             <h3 className="font-medium text-gray-900 mb-1">{item.title}</h3>
-                            <p className="text-gray-600 text-sm mb-1 truncate">{item.content}</p>
+                            <p className="text-sky-600 text-sm mb-1 truncate">{item.content}</p>
                             {item.subcontent && (
-                              <p className="text-gray-500 text-xs">{item.subcontent}</p>
+                              <p className="text-sky-500 text-xs">{item.subcontent}</p>
                             )}
                             {item.action && (
                               <Button
@@ -867,12 +887,12 @@ const Contact = () => {
                       <h2 className="text-2xl font-semibold text-gray-900 mb-2">
                         Send Your Inquiry
                       </h2>
-                      <p className="text-gray-600">
+                      <p className="text-sky-600">
                         We typically respond within{' '}
                         <span className="font-semibold text-orange-600">{estimatedResponseTime}</span>
                       </p>
                     </div>
-                    <div className="hidden md:flex items-center gap-2 text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-full">
+                    <div className="hidden md:flex items-center gap-2 text-sm text-sky-600 bg-orange-50 px-3 py-1 rounded-full">
                       <Shield className="h-4 w-4" />
                       <span>Secure & Confidential</span>
                     </div>
@@ -889,7 +909,7 @@ const Contact = () => {
                           value={formData.name}
                           onChange={(e) => handleChange('name', e.target.value)}
                           placeholder="Enter your full name"
-                          className={`${errors.name ? 'border-red-500' : ''}`}
+                          className={`focus:border-orange-400 focus:ring-orange-400 ${errors.name ? 'border-red-500' : ''}`}
                           disabled={isSubmitting}
                         />
                         {errors.name && (
@@ -909,7 +929,7 @@ const Contact = () => {
                           value={formData.email}
                           onChange={(e) => handleChange('email', e.target.value)}
                           placeholder="Enter your email address"
-                          className={`${errors.email ? 'border-red-500' : ''}`}
+                          className={`focus:border-orange-400 focus:ring-orange-400 ${errors.email ? 'border-red-500' : ''}`}
                           disabled={isSubmitting}
                         />
                         {errors.email && (
@@ -932,7 +952,7 @@ const Contact = () => {
                           value={formData.phone}
                           onChange={(e) => handleChange('phone', e.target.value)}
                           placeholder="+91 12345 67890"
-                          className={`${errors.phone ? 'border-red-500' : ''}`}
+                          className={`focus:border-orange-400 focus:ring-orange-400 ${errors.phone ? 'border-red-500' : ''}`}
                           disabled={isSubmitting}
                         />
                         {errors.phone && (
@@ -953,7 +973,7 @@ const Contact = () => {
                             handleChange('enquiryType', e.target.value);
                             calculateResponseTime(e.target.value);
                           }}
-                          className={`w-full px-3 py-2 border rounded-md bg-white ${
+                          className={`w-full px-3 py-2 border rounded-md bg-white focus:border-orange-400 focus:ring-orange-400 ${
                             errors.enquiryType ? 'border-red-500' : 'border-gray-300'
                           } disabled:opacity-50`}
                           disabled={isSubmitting}
@@ -983,7 +1003,7 @@ const Contact = () => {
                         value={formData.subject}
                         onChange={(e) => handleChange('subject', e.target.value)}
                         placeholder="Enter subject of your inquiry"
-                        className={`${errors.subject ? 'border-red-500' : ''}`}
+                        className={`focus:border-orange-400 focus:ring-orange-400 ${errors.subject ? 'border-red-500' : ''}`}
                         disabled={isSubmitting}
                       />
                       {errors.subject && (
@@ -1004,7 +1024,7 @@ const Contact = () => {
                         onChange={(e) => handleChange('message', e.target.value)}
                         placeholder="Please provide detailed information about your inquiry..."
                         rows={5}
-                        className={`min-h-[120px] ${errors.message ? 'border-red-500' : ''}`}
+                        className={`min-h-[120px] focus:border-orange-400 focus:ring-orange-400 ${errors.message ? 'border-red-500' : ''}`}
                         disabled={isSubmitting}
                       />
                       <div className="flex justify-between items-center mt-1">
@@ -1014,7 +1034,7 @@ const Contact = () => {
                             {errors.message}
                           </p>
                         ) : (
-                          <p className="text-gray-500 text-sm">
+                          <p className="text-sky-600 text-sm">
                             {formData.message.length}/1000 characters
                           </p>
                         )}
@@ -1045,10 +1065,10 @@ const Contact = () => {
                           <div className="space-y-3">
                             <Upload className="h-10 w-10 mx-auto text-gray-400" />
                             <div>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-sky-600">
                                 <span className="text-orange-600 font-medium">Click to upload</span> or drag and drop
                               </p>
-                              <p className="text-xs text-gray-500 mt-1">
+                              <p className="text-xs text-sky-600/80 mt-1">
                                 Maximum 3 files, 5MB each (PDF, JPG, PNG, DOC)
                               </p>
                             </div>
@@ -1057,14 +1077,14 @@ const Contact = () => {
                       </div>
                       {uploadedFiles.length > 0 && (
                         <div className="mt-4 space-y-2">
-                          <p className="text-sm text-gray-600">Uploaded files:</p>
+                          <p className="text-sm text-sky-600">Uploaded files:</p>
                           {uploadedFiles.map((file, index) => (
                             <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg border">
                               <div className="flex items-center gap-3 min-w-0">
-                                <FileText className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                                <FileText className="h-4 w-4 text-sky-600 flex-shrink-0" />
                                 <div className="min-w-0">
-                                  <p className="text-sm truncate">{file.name}</p>
-                                  <p className="text-xs text-gray-500">
+                                  <p className="text-sm truncate text-gray-900">{file.name}</p>
+                                  <p className="text-xs text-sky-600/80">
                                     {(file.size / 1024 / 1024).toFixed(2)} MB
                                   </p>
                                 </div>
@@ -1073,7 +1093,7 @@ const Contact = () => {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() => removeFile(index)}
-                                className="h-8 w-8 p-0 text-gray-500 hover:text-red-600"
+                                className="h-8 w-8 p-0 text-sky-600 hover:text-red-600"
                                 disabled={isSubmitting}
                               >
                                 <X className="h-4 w-4" />
@@ -1100,10 +1120,11 @@ const Contact = () => {
                                 }))
                               }
                               disabled={isSubmitting}
+                              className="text-orange-600 border-gray-300"
                             />
                             <Label 
                               htmlFor={`pref-${key}`} 
-                              className="capitalize text-gray-700 cursor-pointer text-sm"
+                              className="capitalize text-sky-600 cursor-pointer text-sm"
                             >
                               {key === 'whatsapp' ? 'WhatsApp' : key}
                             </Label>
@@ -1118,19 +1139,19 @@ const Contact = () => {
                     </div>
 
                     {/* Consent Checkbox */}
-                    <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg border">
+                    <div className="flex items-start gap-3 p-4 bg-orange-50 rounded-lg border border-orange-200">
                       <Checkbox
                         id="consent"
                         checked={formData.consent}
                         onCheckedChange={(checked) => handleChange('consent', checked)}
                         disabled={isSubmitting}
-                        className="mt-1"
+                        className="mt-1 text-orange-600 border-gray-300"
                       />
                       <div>
                         <Label htmlFor="consent" className="text-gray-700 text-sm">
                           I agree to the processing of my personal data in accordance with your privacy policy
                         </Label>
-                        <p className="text-xs text-gray-600 mt-1">
+                        <p className="text-xs text-sky-600 mt-1">
                           By submitting this form, you acknowledge that your information will be used to respond to 
                           your inquiry and may be stored in accordance with our{' '}
                           <a 
@@ -1189,15 +1210,15 @@ const Contact = () => {
 
                   {/* Additional Information */}
                   <div className="mt-8 pt-6 border-t space-y-3">
-                    <p className="flex items-center gap-2 text-sm text-gray-600">
+                    <p className="flex items-center gap-2 text-sm text-sky-600">
                       <CheckCircle className="h-4 w-4 text-green-600" />
                       All communications are encrypted and secure
                     </p>
-                    <p className="flex items-center gap-2 text-sm text-gray-600">
+                    <p className="flex items-center gap-2 text-sm text-sky-600">
                       <Clock className="h-4 w-4 text-orange-600" />
                       Average response time: {estimatedResponseTime}
                     </p>
-                    <p className="flex items-center gap-2 text-sm text-gray-600">
+                    <p className="flex items-center gap-2 text-sm text-sky-600">
                       <PhoneCall className="h-4 w-4 text-purple-600" />
                       Immediate assistance: +91 93150 58665
                     </p>
@@ -1237,13 +1258,13 @@ const Contact = () => {
               <h3 className="text-2xl font-semibold text-gray-900 mb-3">
                 Inquiry Submitted Successfully
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-sky-600 mb-6">
                 Thank you for contacting CU PG Finder. We have received your inquiry and will 
                 respond within{' '}
                 <span className="font-semibold text-orange-600">{estimatedResponseTime}</span>.
               </p>
               <div className="space-y-4">
-                <div className="text-sm text-gray-600 bg-gray-50 p-4 rounded-lg border">
+                <div className="text-sm text-sky-600 bg-orange-50 p-4 rounded-lg border border-orange-200">
                   <p className="flex items-center gap-2 mb-2">
                     <Mail className="h-4 w-4" />
                     Confirmation email has been sent to your registered email address
@@ -1256,7 +1277,7 @@ const Contact = () => {
                 <div className="flex gap-3 pt-2">
                   <Button
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 text-sky-600 hover:text-orange-600 hover:border-orange-400"
                     onClick={() => setShowSuccessModal(false)}
                   >
                     Close
