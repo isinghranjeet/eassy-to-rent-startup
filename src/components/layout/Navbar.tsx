@@ -42,7 +42,7 @@ export function Navbar() {
             <div className="flex flex-col">
               <span className="text-xl font-bold">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-800 to-sky-800">
-                  Eassy_to_
+                  EassyTo
                 </span>
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-700 to-orange-700">
                   Rent
