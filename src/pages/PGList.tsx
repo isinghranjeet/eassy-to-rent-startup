@@ -134,7 +134,7 @@ const PGList = () => {
         rating: 4.5,
         reviewCount: 42,
         ownerName: 'Rajesh Kumar',
-        ownerPhone: '9876543210',
+        ownerPhone: '9315058665',
         createdAt: new Date().toISOString(),
         distance: '500m from CU',
         locality: 'Gate 1',
