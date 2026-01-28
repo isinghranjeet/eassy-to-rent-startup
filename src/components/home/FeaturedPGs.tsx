@@ -8,20 +8,21 @@ import { PGCard } from '@/components/pg/PGCard';
 const API_URL = 'https://eassy-to-rent-backend.onrender.com';
 
 export function FeaturedPGs() {
-  const [featuredPGs, setFeaturedPGs] = useState([]);
+  const [allPGs, setAllPGs] = useState([]);
+  const [displayedPGs, setDisplayedPGs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showMore, setShowMore] = useState(false);
+  const itemsPerPage = 6;
 
   useEffect(() => {
-    const fetchFeaturedPGs = async () => {
+    const fetchPGs = async () => {
       try {
         setLoading(true);
         setError('');
         
-        console.log('🌐 Fetching featured PGs from:', `${API_URL}/api/pg`);
+        console.log('🌐 Fetching PGs from:', `${API_URL}/api/pg`);
         
-        // First, try to get all PGs and filter featured ones
         const response = await fetch(`${API_URL}/api/pg`);
         
         if (!response.ok) {
@@ -32,34 +33,49 @@ export function FeaturedPGs() {
         console.log('📥 Response received:', result);
         
         if (result.success && Array.isArray(result.data)) {
-          // Filter for featured PGs
-          const featured = result.data
-            .filter(pg => pg.featured === true)
-            .slice(0, showMore ? 6 : 3); // Show 3 or 6 based on state
+          const pgs = result.data;
+          console.log(`✅ Found ${pgs.length} total PGs`);
           
-          console.log(`✅ Found ${featured.length} featured PGs`);
-          setFeaturedPGs(featured);
+          setAllPGs(pgs);
+          
+          // Show featured PGs first, then fall back to other PGs
+          const featured = pgs.filter(pg => pg.featured === true);
+          const nonFeatured = pgs.filter(pg => !pg.featured);
+          
+          // Combine featured + enough non-featured to reach minimum count
+          const allCombined = [...featured, ...nonFeatured];
+          const initialCount = Math.min(itemsPerPage, allCombined.length);
+          const initialPGs = allCombined.slice(0, initialCount);
+          
+          setDisplayedPGs(initialPGs);
         } else {
           console.warn('⚠️ Invalid response format:', result);
           setError(result.message || 'Failed to load PGs');
-          setFeaturedPGs([]);
+          setAllPGs([]);
+          setDisplayedPGs([]);
         }
       } catch (err) {
         console.error('❌ Fetch error:', err);
-        setError('Unable to load featured PGs. Using demo data instead.');
-        
-        // Load demo data as fallback
+        setError('Unable to load PGs from backend. Using demo data instead.');
         loadDemoData();
       } finally {
         setLoading(false);
       }
     };
 
-    fetchFeaturedPGs();
-  }, [showMore]);
+    fetchPGs();
+  }, []);
+
+  // Update displayed PGs when showMore changes
+  useEffect(() => {
+    if (allPGs.length > 0) {
+      const count = showMore ? allPGs.length : Math.min(itemsPerPage, allPGs.length);
+      setDisplayedPGs(allPGs.slice(0, count));
+    }
+  }, [showMore, allPGs]);
 
   const loadDemoData = () => {
-    console.log('🔄 Loading demo featured PGs...');
+    console.log('🔄 Loading demo PGs...');
     const demoPGs = [
       {
         _id: 'demo-1',
@@ -117,11 +133,112 @@ export function FeaturedPGs() {
         ownerName: 'Amit Verma',
         ownerPhone: '9876543212',
         distance: '200m from Sports Complex'
+      },
+      {
+        _id: 'demo-4',
+        name: 'Elite Boys Hostel',
+        city: 'Chandigarh',
+        locality: 'Gate 2',
+        address: 'Gate 2, Chandigarh University',
+        price: 9000,
+        type: 'boys',
+        rating: 4.6,
+        reviewCount: 38,
+        description: 'Modern boys hostel with gym and study rooms',
+        images: ['https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=800&auto=format&fit=crop&q=80'],
+        amenities: ['WiFi', 'AC', 'Gym', 'Meals', 'Parking', 'CCTV', 'Laundry'],
+        verified: true,
+        featured: false,
+        ownerName: 'Vikram Singh',
+        ownerPhone: '9876543213',
+        distance: '400m from Gate 2'
+      },
+      {
+        _id: 'demo-5',
+        name: 'Royal Girls PG',
+        city: 'Chandigarh',
+        locality: 'Academic Block',
+        address: 'Near Academic Block, CU',
+        price: 10000,
+        type: 'girls',
+        rating: 4.9,
+        reviewCount: 45,
+        description: 'Luxury accommodation for girls with premium amenities',
+        images: ['https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=800&auto=format&fit=crop&q=80'],
+        amenities: ['WiFi', 'AC', 'Meals', 'Gym', 'Spa', 'CCTV', '24/7 Security'],
+        verified: true,
+        featured: false,
+        ownerName: 'Neha Gupta',
+        ownerPhone: '9876543214',
+        distance: '150m from Academic Block'
+      },
+      {
+        _id: 'demo-6',
+        name: 'Student Comfort PG',
+        city: 'Chandigarh',
+        locality: 'Market Road',
+        address: 'Market Road, Near CU',
+        price: 7000,
+        type: 'co-ed',
+        rating: 4.2,
+        reviewCount: 31,
+        description: 'Budget-friendly PG with all basic amenities',
+        images: ['https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=800&auto=format&fit=crop&q=80'],
+        amenities: ['WiFi', 'Meals', 'Laundry', 'Common Area', 'Hot Water'],
+        verified: true,
+        featured: false,
+        ownerName: 'Sanjay Mehta',
+        ownerPhone: '9876543215',
+        distance: '600m from Market'
+      },
+      {
+        _id: 'demo-7',
+        name: 'Premium Boys Accommodation',
+        city: 'Chandigarh',
+        locality: 'Hostel Zone',
+        address: 'Hostel Zone, CU Campus',
+        price: 11000,
+        type: 'boys',
+        rating: 4.7,
+        reviewCount: 52,
+        description: 'Top-tier accommodation with private rooms and premium facilities',
+        images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop&q=80'],
+        amenities: ['WiFi', 'AC', 'Private Bath', 'Meals', 'Gym', 'Parking', 'CCTV'],
+        verified: true,
+        featured: true,
+        ownerName: 'Rahul Sharma',
+        ownerPhone: '9876543216',
+        distance: 'On Campus'
+      },
+      {
+        _id: 'demo-8',
+        name: 'Cosy Girls Nest',
+        city: 'Chandigarh',
+        locality: 'Peace Road',
+        address: 'Peace Road, Near CU',
+        price: 8000,
+        type: 'girls',
+        rating: 4.4,
+        reviewCount: 29,
+        description: 'Comfortable and secure girls PG in peaceful locality',
+        images: ['https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800&auto=format&fit=crop&q=80'],
+        amenities: ['WiFi', 'AC', 'Meals', 'Security', 'Laundry', 'Hot Water'],
+        verified: true,
+        featured: false,
+        ownerName: 'Anjali Patel',
+        ownerPhone: '9876543217',
+        distance: '700m from Campus'
       }
     ];
     
-    setFeaturedPGs(showMore ? demoPGs : demoPGs.slice(0, 3));
-    console.log('✅ Demo data loaded');
+    const featured = demoPGs.filter(pg => pg.featured);
+    const nonFeatured = demoPGs.filter(pg => !pg.featured);
+    const allCombined = [...featured, ...nonFeatured];
+    const initialCount = Math.min(itemsPerPage, allCombined.length);
+    
+    setAllPGs(demoPGs);
+    setDisplayedPGs(allCombined.slice(0, initialCount));
+    console.log(`✅ Demo data loaded: ${demoPGs.length} PGs`);
   };
 
   const handleRetry = () => {
@@ -146,7 +263,7 @@ export function FeaturedPGs() {
             <div className="h-10 w-32 bg-gray-200 rounded animate-pulse"></div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3, 4, 5, 6].map((i) => (
               <div key={i} className="bg-white border rounded-xl overflow-hidden animate-pulse">
                 <div className="h-48 bg-gray-200"></div>
                 <div className="p-4">
@@ -162,7 +279,7 @@ export function FeaturedPGs() {
     );
   }
 
-  if (error && featuredPGs.length === 0) {
+  if (error && allPGs.length === 0) {
     return (
       <section className="py-16 md:py-24 bg-gradient-to-b from-white to-orange-50/30">
         <div className="container mx-auto px-4">
@@ -196,6 +313,8 @@ export function FeaturedPGs() {
     );
   }
 
+  const hasMorePGs = allPGs.length > itemsPerPage;
+
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-white to-orange-50/30">
       <div className="container mx-auto px-4">
@@ -211,13 +330,21 @@ export function FeaturedPGs() {
               Featured PG Accommodations
             </h2>
             <p className="text-gray-600 mt-3 max-w-2xl">
-              Hand-picked premium stays loved by students for their comfort, location, and amenities. 
+              {displayedPGs.length} premium stays loved by students for their comfort, location, and amenities. 
               All verified and highly rated by residents.
             </p>
+            <div className="flex items-center gap-2 mt-3 text-sm text-gray-500">
+              <span className="inline-flex items-center gap-1">
+                <span className="h-2 w-2 rounded-full bg-orange-500"></span>
+                <span className="font-medium">{allPGs.filter(pg => pg.featured).length}</span> Featured
+              </span>
+              <span className="text-gray-300">•</span>
+              <span>Total: {allPGs.length} PGs</span>
+            </div>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            {featuredPGs.length > 3 && (
+            {hasMorePGs && (
               <Button 
                 onClick={() => setShowMore(!showMore)}
                 variant="outline" 
@@ -235,14 +362,14 @@ export function FeaturedPGs() {
           </div>
         </div>
 
-        {featuredPGs.length === 0 ? (
+        {displayedPGs.length === 0 ? (
           <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-2xl bg-white">
             <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-gray-100 flex items-center justify-center">
               <span className="text-2xl">🏠</span>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No Featured PGs Available</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">No PGs Available</h3>
             <p className="text-gray-600 mb-6 max-w-md mx-auto">
-              There are no featured accommodations at the moment. Check back soon!
+              There are no accommodations available at the moment. Check back soon!
             </p>
             <div className="flex gap-3 justify-center">
               <Button 
@@ -250,28 +377,31 @@ export function FeaturedPGs() {
                 variant="outline"
                 className="border-orange-300"
               >
-                Refresh
+                Load Demo Data
               </Button>
-              <a href={`${API_URL}/api/pg/sample-data`} target="_blank" rel="noopener noreferrer">
-                <Button className="bg-orange-600 hover:bg-orange-700">
-                  Add Sample Data
-                </Button>
-              </a>
             </div>
           </div>
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredPGs.map((pg, index) => (
+              {displayedPGs.map((pg, index) => (
                 <div 
                   key={pg._id || index} 
                   className="transform transition-transform duration-300 hover:-translate-y-2"
                 >
+                  {pg.featured && (
+                    <div className="absolute top-3 left-3 z-10">
+                      <div className="inline-flex items-center gap-1 px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full shadow-sm">
+                        <Star className="h-3 w-3 fill-white" />
+                        Featured
+                      </div>
+                    </div>
+                  )}
                   <PGCard pg={pg} index={index} />
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-12 pt-8 border-t border-gray-200">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-center sm:text-left">
@@ -282,20 +412,20 @@ export function FeaturedPGs() {
                     Browse our complete collection of verified PG accommodations
                   </p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-2 justify-center">
                   <Link to="/pg?type=boys">
                     <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50">
-                      👦 Boys PG
+                      👦 Boys PG ({allPGs.filter(pg => pg.type === 'boys').length})
                     </Button>
                   </Link>
                   <Link to="/pg?type=girls">
                     <Button variant="outline" className="border-pink-300 text-pink-700 hover:bg-pink-50">
-                      👧 Girls PG
+                      👧 Girls PG ({allPGs.filter(pg => pg.type === 'girls').length})
                     </Button>
                   </Link>
                   <Link to="/pg?type=co-ed">
                     <Button variant="outline" className="border-purple-300 text-purple-700 hover:bg-purple-50">
-                      👫 Co-ed PG
+                      👫 Co-ed PG ({allPGs.filter(pg => pg.type === 'co-ed').length})
                     </Button>
                   </Link>
                 </div>
