@@ -12,7 +12,6 @@ export function FeaturedPGs() {
   const [displayedPGs, setDisplayedPGs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [showMore, setShowMore] = useState(false);
   const itemsPerPage = 6;
 
   useEffect(() => {
@@ -65,14 +64,6 @@ export function FeaturedPGs() {
 
     fetchPGs();
   }, []);
-
-  // Update displayed PGs when showMore changes
-  useEffect(() => {
-    if (allPGs.length > 0) {
-      const count = showMore ? allPGs.length : Math.min(itemsPerPage, allPGs.length);
-      setDisplayedPGs(allPGs.slice(0, count));
-    }
-  }, [showMore, allPGs]);
 
   const loadDemoData = () => {
     console.log('🔄 Loading demo PGs...');
@@ -313,8 +304,6 @@ export function FeaturedPGs() {
     );
   }
 
-  const hasMorePGs = allPGs.length > itemsPerPage;
-
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-white to-orange-50/30">
       <div className="container mx-auto px-4">
@@ -344,15 +333,6 @@ export function FeaturedPGs() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
-            {hasMorePGs && (
-              <Button 
-                onClick={() => setShowMore(!showMore)}
-                variant="outline" 
-                className="border-orange-300 hover:bg-orange-50"
-              >
-                {showMore ? 'Show Less' : 'Show More'}
-              </Button>
-            )}
             <Link to="/pg">
               <Button className="bg-orange-600 hover:bg-orange-700 gap-2">
                 View All PGs
