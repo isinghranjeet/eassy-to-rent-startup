@@ -7,7 +7,8 @@ import { useDebounce } from '@/lib/hooks/useDebounce';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle, Search, Grid, List } from 'lucide-react';
 
-const API_URL = 'http://localhost:10000/api';
+// Updated to use your Render backend
+const API_URL = 'https://eassy-to-rent-backend.onrender.com/api';
 
 interface PGListing {
   _id: string;
@@ -64,7 +65,7 @@ const PGList = () => {
       setError(null);
       
       const url = `${API_URL}/pg`;
-      console.log('Fetching listings from:', url);
+      console.log('Fetching listings from Render backend:', url);
       
       const response = await fetch(url);
       
@@ -73,6 +74,7 @@ const PGList = () => {
       }
       
       const result = await response.json();
+      console.log('API Response:', result);
       
       if (!result.success) {
         throw new Error(result.message || 'API request failed');
