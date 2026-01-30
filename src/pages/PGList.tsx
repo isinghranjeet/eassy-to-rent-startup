@@ -7,8 +7,8 @@ import { useDebounce } from '@/lib/hooks/useDebounce';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle, Search, Grid, List } from 'lucide-react';
 
-// ✅ FIXED: Remove /api from base URL
-const API_URL = 'https://eassy-to-rent-backend.onrender.com';
+// Updated to use your Render backend
+const API_URL = 'https://eassy-to-rent-backend.onrender.com/api';
 
 interface PGListing {
   _id: string;
@@ -64,45 +64,32 @@ const PGList = () => {
       setLoading(true);
       setError(null);
       
-      // ✅ FIXED: Correct endpoint path
-      const url = `${API_URL}/api/pg`;
-      console.log('🔍 Fetching from:', url);
+      const url = `${API_URL}/pg`;
+      console.log('Fetching listings from Render backend:', url);
       
-      // ✅ Add headers for better debugging
-      const response = await fetch(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors'
-      });
-      
-      console.log('📊 Response Status:', response.status, response.statusText);
+      const response = await fetch(url);
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Response Error:', errorText);
-        throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       
       const result = await response.json();
-      console.log('✅ API Response Success:', result.success);
-      console.log('📦 Data received:', result.data ? `${result.data.length} items` : 'No data');
+      console.log('API Response:', result);
       
       if (!result.success) {
-        console.warn('⚠️ API returned success: false', result.message);
-        toast.warning(result.message || 'API request returned warning');
+        throw new Error(result.message || 'API request failed');
       }
       
       const listingsData = result.data || [];
       const listingsArray = Array.isArray(listingsData) ? listingsData : [];
       
-      console.log(`📊 Total listings: ${listingsArray.length}`);
-      
       if (listingsArray.length === 0) {
-        console.log('ℹ️ No listings found');
-        toast.info('No PG listings found. Try adding some or check database connection.');
+        console.log('No data received from API');
+        toast.info('No PG listings found. Please add some listings.');
+        return;
       }
+      
+      console.log(`Received ${listingsArray.length} listings from database`);
       
       const transformedListings: PGListing[] = listingsArray.map((listing: any) => {
         // Ensure we have valid images
@@ -117,14 +104,11 @@ const PGList = () => {
           amenities = listing.amenities.filter((a: string) => a && a.trim() !== '');
         }
         
-        // Get city from location if city is empty
-        const city = listing.city || (listing.location || '').split(',')[0] || 'Chandigarh';
-        
         return {
-          _id: listing._id?.toString() || `mock-${Math.random()}`,
+          _id: listing._id?.toString(),
           name: listing.name || 'Premium PG',
           description: listing.description || 'Comfortable accommodation with amenities',
-          city: city,
+          city: listing.city || 'Chandigarh',
           address: listing.address || 'Location',
           price: listing.price || 0,
           type: (listing.type as 'boys' | 'girls' | 'co-ed' | 'family') || 'boys',
@@ -140,57 +124,17 @@ const PGList = () => {
           slug: listing.slug,
           distance: listing.distance,
           locality: listing.locality,
-          location: listing.city || listing.location,
-          published: listing.published !== undefined ? listing.published : true
+          location: listing.city,
+          published: listing.published
         };
       });
       
       setListings(transformedListings);
       
     } catch (err: any) {
-      console.error('❌ Error fetching listings:', err);
+      console.error('Error fetching listings:', err);
       setError(`Failed to load listings: ${err.message}`);
-      toast.error('Failed to load PG listings. Check console for details.');
-      
-      // Fallback to sample data for testing
-      if (listings.length === 0) {
-        console.log('🔄 Using fallback sample data');
-        const sampleListings: PGListing[] = [
-          {
-            _id: 'sample-1',
-            name: 'Sample PG 1',
-            description: 'This is sample data for testing',
-            city: 'Chandigarh',
-            address: 'Sample Address',
-            price: 8500,
-            type: 'boys',
-            images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800'],
-            amenities: ['WiFi', 'AC', 'Meals'],
-            verified: true,
-            featured: false,
-            rating: 4.2,
-            reviewCount: 24,
-            createdAt: new Date().toISOString()
-          },
-          {
-            _id: 'sample-2',
-            name: 'Sample PG 2',
-            description: 'Another sample listing',
-            city: 'Mohali',
-            address: 'Test Location',
-            price: 9500,
-            type: 'girls',
-            images: ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800'],
-            amenities: ['WiFi', 'Parking', 'Gym'],
-            verified: false,
-            featured: true,
-            rating: 4.5,
-            reviewCount: 42,
-            createdAt: new Date().toISOString()
-          }
-        ];
-        setListings(sampleListings);
-      }
+      toast.error('Failed to load PG listings');
     } finally {
       setLoading(false);
     }
@@ -267,7 +211,6 @@ const PGList = () => {
           <div className="text-center py-24">
             <Loader2 className="h-12 w-12 text-gray-400 animate-spin mx-auto mb-4" />
             <p className="text-gray-600">Loading accommodations...</p>
-            <p className="text-sm text-gray-500 mt-2">Fetching from: {API_URL}/api/pg</p>
           </div>
         </div>
         <Footer />
@@ -287,24 +230,14 @@ const PGList = () => {
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Find PG Accommodations</h1>
               <p className="text-gray-600">
                 {listings.length} accommodations available
-                {error && <span className="ml-2 text-red-600">(Error: {error})</span>}
               </p>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={refreshListings}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm transition-colors"
-              >
-                Refresh Listings
-              </button>
-              <button
-                onClick={() => window.open(`${API_URL}/api/pg`, '_blank')}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm transition-colors"
-                title="Check API directly"
-              >
-                Test API
-              </button>
-            </div>
+            <button
+              onClick={refreshListings}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm transition-colors"
+            >
+              Refresh Listings
+            </button>
           </div>
           
           <div className="relative max-w-2xl">
@@ -328,15 +261,7 @@ const PGList = () => {
               Showing <span className="font-semibold">{filteredPGs.length}</span> of {listings.length} results
             </p>
             {error && (
-              <div className="mt-1">
-                <p className="text-sm text-red-600">Error: {error}</p>
-                <button
-                  onClick={fetchListings}
-                  className="text-sm text-blue-600 hover:text-blue-800"
-                >
-                  Click to retry
-                </button>
-              </div>
+              <p className="text-sm text-red-600 mt-1">{error}</p>
             )}
           </div>
           
@@ -437,46 +362,33 @@ const PGList = () => {
               <Search className="h-10 w-10 text-gray-400" />
             </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">No accommodations found</h3>
-            <p className="text-gray-600 mb-4">
+            <p className="text-gray-600 mb-6">
               Try adjusting your search criteria
             </p>
-            <p className="text-sm text-gray-500 mb-6">
-              Backend URL: {API_URL}
-            </p>
-            <div className="flex gap-2 justify-center">
-              <button
-                onClick={clearFilters}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Clear Filters
-              </button>
-              <button
-                onClick={refreshListings}
-                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-              >
-                Refresh Data
-              </button>
-            </div>
+            <button
+              onClick={clearFilters}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Clear Filters
+            </button>
           </div>
         )}
 
-        {/* Debug Info */}
-        <div className="mt-8 p-4 bg-gray-50 rounded-lg border">
-          <h4 className="font-medium text-gray-900 mb-2">Debug Information:</h4>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p>• Backend URL: {API_URL}</p>
-            <p>• API Endpoint: {API_URL}/api/pg</p>
-            <p>• Total Listings: {listings.length}</p>
-            <p>• Filtered Results: {filteredPGs.length}</p>
-            <p>• Last Fetch: {loading ? 'Loading...' : 'Completed'}</p>
-            <button 
-              onClick={() => window.open(`${API_URL}/api/pg`, '_blank')}
-              className="text-blue-600 hover:text-blue-800"
+        {/* Error State */}
+        {error && (
+          <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-2 text-red-700">
+              <AlertCircle className="h-5 w-5" />
+              <p className="text-sm">{error}</p>
+            </div>
+            <button
+              onClick={fetchListings}
+              className="mt-2 px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 text-sm"
             >
-              Test API in new tab
+              Retry
             </button>
           </div>
-        </div>
+        )}
       </main>
 
       <Footer />
