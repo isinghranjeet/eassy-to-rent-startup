@@ -395,17 +395,22 @@ export function FeaturedPGs() {
                 <div className="flex flex-wrap gap-2 justify-center">
                   <Link to="/pg?type=boys">
                     <Button variant="outline" className="border-blue-300 text-blue-700 hover:bg-blue-50">
-                      👦 Boys PG ({allPGs.filter(pg => pg.type === 'boys').length})
+                       Boys PG ({allPGs.filter(pg => pg.type === 'boys').length})
                     </Button>
                   </Link>
                   <Link to="/pg?type=girls">
                     <Button variant="outline" className="border-pink-300 text-pink-700 hover:bg-pink-50">
-                      👧 Girls PG ({allPGs.filter(pg => pg.type === 'girls').length})
+                       Girls PG ({allPGs.filter(pg => pg.type === 'girls').length})
                     </Button>
                   </Link>
                   <Link to="/pg?type=co-ed">
                     <Button variant="outline" className="border-purple-300 text-purple-700 hover:bg-purple-50">
-                      👫 Co-ed PG ({allPGs.filter(pg => pg.type === 'co-ed').length})
+                       Co-ed PG ({allPGs.filter(pg => pg.type === 'co-ed').length})
+                    </Button>
+                  </Link>
+                   <Link to="/pg?type=co-ed">
+                    <Button variant="outline" className="border-purple-300 text-purple-700 hover:bg-purple-50">
+                       Family ({allPGs.filter(pg => pg.type === 'co-ed').length})
                     </Button>
                   </Link>
                 </div>

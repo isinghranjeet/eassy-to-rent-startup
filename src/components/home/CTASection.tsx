@@ -23,7 +23,10 @@ export function CTASection() {
             Ready to Find Your Perfect PG?
           </h2>
           <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
-            Join thousands of CU students who found their ideal accommodation through us. Start your search today!
+            Discover verified PG accommodations near Chandigarh University campus. Safe, affordable, and just a walk away from your classes.
+Enjoy hassle-free booking with zero brokerage and genuine listings.
+Perfect for students seeking comfort, security, and convenience near Chandigarh University.
+Join thousands of Chandigarh University students who found their ideal accommodation through us.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

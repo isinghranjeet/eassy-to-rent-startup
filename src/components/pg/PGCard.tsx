@@ -258,9 +258,9 @@ export function PGCard({ pg, index = 0 }: PGCardProps) {
               ? 'bg-pink-500/90 text-white' 
               : 'bg-purple-500/90 text-white'
           }`}>
-            {pg.type === 'boys' ? '👦 Boys' : 
-             pg.type === 'girls' ? '👧 Girls' : 
-             '👫 Co-ed'}
+            {pg.type === 'boys' ? ' Boys' : 
+             pg.type === 'girls' ? ' Girls' : 
+             ' Co-ed'}
           </span>
         </div>
 

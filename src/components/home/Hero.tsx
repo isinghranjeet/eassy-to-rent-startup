@@ -49,13 +49,7 @@ export function Hero() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
-          {/* Badge - Orange */}
-          <div className="inline-flex items-center gap-2 bg-primary-foreground/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6 animate-fade-up">
-            <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse-soft" />
-            <span className="text-orange-600 dark:text-orange-500 text-sm font-medium">
-              #1 PG Finder for CU Students
-            </span>
-          </div>
+         
 
           {/* Heading - Orange Accent */}
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary-foreground mb-6 animate-fade-up" style={{ animationDelay: '100ms' }}>
@@ -68,7 +62,9 @@ export function Hero() {
           </h1>
 
           <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 max-w-2xl mx-auto animate-fade-up" style={{ animationDelay: '200ms' }}>
-            Discover verified PG accommodations near CU campus. Safe, affordable, and just a walk away from your classes.
+           Discover verified PG accommodations near Chandigarh University campus. Safe, affordable, and just a walk away from your classes.
+Enjoy hassle-free booking with zero brokerage and genuine listings.
+Perfect for students seeking comfort, security, and convenience near Chandigarh University.
           </p>
 
           {/* Search Box */}
@@ -107,6 +103,8 @@ export function Hero() {
                   <SelectItem value="boys">Boys</SelectItem>
                   <SelectItem value="girls">Girls</SelectItem>
                   <SelectItem value="co-ed">Co-Ed</SelectItem>
+                    <SelectItem value="co-ed">Family</SelectItem>
+
                 </SelectContent>
               </Select>
             </div>
